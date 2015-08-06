@@ -1,5 +1,3 @@
-/*Copyright 1996-20141 Information Builders, Inc. All rights reserved.*/
-
 /******************************************************************************
 	General Notes:
 		It appears that all modern browsers support the single line flex
