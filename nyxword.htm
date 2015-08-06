@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>New York Times Daily Crossword</title>
+		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=1024,  height=468, initial-scale=1, xminimum-scale=.5, xmaximum-scale=2, user-scalable=yes">
+
+		<style type="text/css">
+			.PuzTable {margin-bottom:0px;border-collapse:collapse;}
+			.PuzTable td {vertical-align:top;height:20px;width:20px;border:1px solid black;padding:0px;}
+			.PuzTitle{font-family:Arial;font-weight:normal;font-size:8pt;}
+			.puzzle-selection
+			{
+				width:250px;
+				font-family:Arial;
+				font-size:9pt;
+				background-color:white;
+				border:1px solid black;
+				padding:5px;
+				margin-bottom:10px;
+				box-shadow: 5px 5px 5px gray;
+			}
+			.date-picker{width: 115px;}
+			.ctrl-container{margin-top:7px;}
+			.ctrl-container *{vertical-align: middle;}
+			.vblack {background-color:#000000;visibility:visible;}
+			.num{height:6pt;font-family:arial;font-size:6pt;visibility:visible}
+			.letter{height:100%;width:100%;font-family:helvetica;font-size:8pt;text-align:center;display:none;}
+			.subst{font-family:verdana;font-size:8pt;text-align:center;display:normal;}
+			.subst2{font-family:verdana;font-size:8pt;text-align:center;display:normal;}
+			.clue{font-family:arial;font-size:7pt;vertical-align:top}
+			.clhead{font-family:arial;font-size:12pt;font-weight:bold;}
+			.copy{font-family:Arial;font-weight:bold;font-size:7pt;}
+			#CPHContent_AnsTable a{visibility:hidden;}
+
+			@media print
+			{
+				.puzzle-selection{display: none;}
+			}
+		</style>
+
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+
+		<script type="text/javascript">
+			sprintf = function (sPattern, args) {
+				var _args = arguments;
+				return sPattern && sPattern.replace(/\%(\d+)/g, function (s, n) {
+					return _args[n];
+				});
+			};
+			$(function()
+			{
+				function LoadPuzzle(date)
+				{
+					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
+					var strUri = "./proxy.jsp?" + strParm;
+					var ret = $.ajax(
+					{
+						"url": strUri,
+						"dataType":"html",
+						"success":function(puzzlePage)
+						{
+							puzzlePage = puzzlePage.replace(/: /g, "");
+							var $puzzPage = $(puzzlePage);
+							var $puzzTab = $puzzPage.find("#CPHContent_PuzTable");
+							var $puzzClues = $puzzPage.find("#CPHContent_AnsTable");
+							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
+							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright");
+							
+							var $puzzContainer = $(".puzzle-container").empty().draggable();
+							$puzzTitle.appendTo($puzzContainer);
+							$puzzTab.appendTo($puzzContainer);
+							$puzzCRight.appendTo($puzzContainer);
+							
+							var $cluesContainer = $(".puzzle-clues").empty().draggable();
+							$puzzClues.appendTo($cluesContainer);
+
+							//var $cluesAcross = $cluesContainer.find("#CPHContent_AcrossClues").appendTo($cluesContainer).draggable();
+							//var $cluesDown = $cluesContainer.find("#CPHContent_DownClues").appendTo($cluesContainer).draggable();
+						},
+						"error":function(xhr, strError, strMessage)
+						{
+							$(document.documentElement).html(xhr.responseText);
+						}
+					});
+				}
+
+				var date = new Date();
+				$(".date-picker").datepicker().datepicker("setDate", date).on("change", function(e)
+				{
+					var date = $(e.target).datepicker("getDate");
+					LoadPuzzle(date);
+				});
+				LoadPuzzle(date);
+
+				$("#cbDiagramless").on("change", function(e)
+				{
+					$(".vblack").css("backgroundColor", (this.checked) ? "white" : "black");
+					$(".num").css("color", (this.checked) ? "white" : "black");
+				});
+				
+				$("#cbAnswers").on("change", function(e)
+				{
+					$(".letter").css("display", (this.checked) ? "inherit" : "none");
+				});
+
+				$("#btnPrint").on("click", function(e)
+				{
+					window.print();
+				});
+				$(".puzzle-selection").draggable();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="puzzle-selection">
+			<div>
+				Puzzle Date: <input type="text" class="date-picker" readonly="">
+				<button id="btnPrint">Print...</button>
+			</div>
+			<div class="ctrl-container">
+				<input id="cbAnswers" type="checkbox"/>
+				<label for="cbAnswers">Anwsers</label>
+				<input id="cbDiagramless" type="checkbox"/>
+				<label for="cbDiagramless">Diagramless</label>
+			</div>
+		</div>
+		<div class="puzzle-container"></div>
+		<div class="puzzle-clues">
+		</div>
+	</body>
+</html>
+
