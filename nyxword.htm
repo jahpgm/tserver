@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=1024,  height=468, initial-scale=1, xminimum-scale=.5, xmaximum-scale=2, user-scalable=yes">
 
 		<style type="text/css">
-			*{user-select: none;cursor: default;}
+			*{user-select:none;cursor: default;}
 			.vblack {background-color:#000000;visibility:visible;}
 			.num{height:6pt;font-family:arial;font-size:6pt;visibility:visible}
 			.letter{height:100%;width:100%;font-family:helvetica;font-size:8pt;text-align:center;display:none;}
@@ -22,9 +22,6 @@
 			.puzzle-selection
 			{
 				z-index:1000;
-				position:absolute;
-				left:500px;
-				top:50px;
 				width:250px;
 				font-family:Arial;
 				font-size:9pt;
@@ -59,9 +56,11 @@
 			}
 		</style>
 
+		<link rel="stylesheet" href="./widget_box.css">
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+		<script src="./widget_box.js"></script>
 
 		<script type="text/javascript">
 			sprintf = function (sPattern, args) {
@@ -88,14 +87,23 @@
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright");
 
-							var $puzzContainer = $(".puzzle-container").empty().draggable();
+							var $puzzSelection = $(".puzzle-selection").boxchild();
+							var $puzzContainer = $(".puzzle-container").boxchild().empty();
 							$puzzContainer.append($puzzTitle);
 							$puzzContainer.append($puzzTab);
 							$puzzContainer.append($puzzCRight);
 							
-							var $puzzClues = $(".puzzle-clues").draggable();
-							var $cluesAcross = $(".puzzle-clues-across").draggable().append($puzzPage.find("#CPHContent_AcrossClues"));
-							var $cluesDown = $(".puzzle-clues-down").draggable().append($puzzPage.find("#CPHContent_DownClues"));
+							var $puzzClues = $(".puzzle-clues");
+							var $cluesAcross = $(".puzzle-clues-across").append($puzzPage.find("#CPHContent_AcrossClues"));
+							var $cluesDown = $(".puzzle-clues-down").append($puzzPage.find("#CPHContent_DownClues"));
+						
+							var options = 
+							{
+								"direction":"row",
+								"justifycontent":"center",
+								"alignitems":"center"
+							}
+							$(".puzzle-page-container").box(options);
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -127,39 +135,40 @@
 				{
 					window.print();
 				});
-				$(".puzzle-selection").draggable();
 			});
 		</script>
 	</head>
 	<body>
-		<div class="puzzle-selection">
-			<div>
-				Puzzle Date: <input type="text" class="date-picker" readonly="">
-				<button id="btnPrint">Print...</button>
+		<div class="puzzle-page-container">
+			<div class="puzzle-selection">
+				<div>
+					Puzzle Date: <input type="text" class="date-picker" readonly="">
+					<button id="btnPrint">Print...</button>
+				</div>
+				<div class="ctrl-container">
+					<input id="cbAnswers" type="checkbox"/>
+					<label for="cbAnswers">Anwsers</label>
+					<input id="cbDiagramless" type="checkbox"/>
+					<label for="cbDiagramless">Diagramless</label>
+				</div>
 			</div>
-			<div class="ctrl-container">
-				<input id="cbAnswers" type="checkbox"/>
-				<label for="cbAnswers">Anwsers</label>
-				<input id="cbDiagramless" type="checkbox"/>
-				<label for="cbDiagramless">Diagramless</label>
+			<div class="puzzle-container"></div>
+			<div class="puzzle-clues">
+				<table>
+					<tr>
+						<td>
+							<div class="puzzle-clues-across">
+								<div class="puzzle-across-header">Across</div>
+							</div>
+						</td>
+						<td>
+							<div class="puzzle-clues-down">
+								<div class="puzzle-across-header">Down</div>
+							</div>
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div>
-		<div class="puzzle-container"></div>
-		<div class="puzzle-clues">
-			<table>
-				<tr>
-					<td>
-						<div class="puzzle-clues-across">
-							<div class="puzzle-across-header">Across</div>
-						</div>
-					</td>
-					<td>
-						<div class="puzzle-clues-down">
-							<div class="puzzle-across-header">Down</div>
-						</div>
-					</td>
-				</tr>
-			</table>
 		</div>
 	</body>
 </html>
