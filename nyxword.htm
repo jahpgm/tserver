@@ -74,7 +74,6 @@
 			{
 				function LoadPuzzle(date)
 				{
-					//date = new Date(2015, 7, 2);
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
 					var strUri = "./proxy.jsp?" + strParm;
 					var ret = $.ajax(
@@ -88,7 +87,7 @@
 							var $puzzTab = $puzzPage.find("#CPHContent_PuzTable");
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright");
-							
+
 							var $puzzContainer = $(".puzzle-container").empty().draggable();
 							$puzzContainer.append($puzzTitle);
 							$puzzContainer.append($puzzTab);
@@ -97,6 +96,8 @@
 							var $puzzClues = $(".puzzle-clues").draggable();
 							var $cluesAcross = $(".puzzle-clues-across").draggable().append($puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").draggable().append($puzzPage.find("#CPHContent_DownClues"));
+
+							$(".puzzle-page-container").draggable();
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -133,34 +134,36 @@
 		</script>
 	</head>
 	<body>
-		<div class="puzzle-selection">
-			<div>
-				Puzzle Date: <input type="text" class="date-picker" readonly="">
-				<button id="btnPrint">Print...</button>
+		<div class=".puzzle-page-container" style="padding:100px;border:1px solid red;">
+			<div class="puzzle-selection">
+				<div>
+					Puzzle Date: <input type="text" class="date-picker" readonly="">
+					<button id="btnPrint">Print...</button>
+				</div>
+				<div class="ctrl-container">
+					<input id="cbAnswers" type="checkbox"/>
+					<label for="cbAnswers">Anwsers</label>
+					<input id="cbDiagramless" type="checkbox"/>
+					<label for="cbDiagramless">Diagramless</label>
+				</div>
 			</div>
-			<div class="ctrl-container">
-				<input id="cbAnswers" type="checkbox"/>
-				<label for="cbAnswers">Anwsers</label>
-				<input id="cbDiagramless" type="checkbox"/>
-				<label for="cbDiagramless">Diagramless</label>
+			<div class="puzzle-container"></div>
+			<div class="puzzle-clues">
+				<table>
+					<tr>
+						<td>
+							<div class="puzzle-clues-across">
+								<div class="puzzle-across-header">Across</div>
+							</div>
+						</td>
+						<td>
+							<div class="puzzle-clues-down">
+								<div class="puzzle-across-header">Down</div>
+							</div>
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div>
-		<div class="puzzle-container"></div>
-		<div class="puzzle-clues">
-			<table>
-				<tr>
-					<td>
-						<div class="puzzle-clues-across">
-							<div class="puzzle-across-header">Across</div>
-						</div>
-					</td>
-					<td>
-						<div class="puzzle-clues-down">
-							<div class="puzzle-across-header">Down</div>
-						</div>
-					</td>
-				</tr>
-			</table>
 		</div>
 	</body>
 </html>
