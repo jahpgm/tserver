@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿<script src="https://gist.github.com/pgmjah/a7fbf59632c5518d3f2e.js"></script>
+
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>New York Times Daily Crossword</title>
@@ -96,8 +98,6 @@
 							var $puzzClues = $(".puzzle-clues").draggable();
 							var $cluesAcross = $(".puzzle-clues-across").draggable().append($puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").draggable().append($puzzPage.find("#CPHContent_DownClues"));
-
-							$(".puzzle-page-container").draggable();
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -134,36 +134,34 @@
 		</script>
 	</head>
 	<body>
-		<div class=".puzzle-page-container" style="padding:100px;border:1px solid red;">
-			<div class="puzzle-selection">
-				<div>
-					Puzzle Date: <input type="text" class="date-picker" readonly="">
-					<button id="btnPrint">Print...</button>
-				</div>
-				<div class="ctrl-container">
-					<input id="cbAnswers" type="checkbox"/>
-					<label for="cbAnswers">Anwsers</label>
-					<input id="cbDiagramless" type="checkbox"/>
-					<label for="cbDiagramless">Diagramless</label>
-				</div>
+		<div class="puzzle-selection">
+			<div>
+				Puzzle Date: <input type="text" class="date-picker" readonly="">
+				<button id="btnPrint">Print...</button>
 			</div>
-			<div class="puzzle-container"></div>
-			<div class="puzzle-clues">
-				<table>
-					<tr>
-						<td>
-							<div class="puzzle-clues-across">
-								<div class="puzzle-across-header">Across</div>
-							</div>
-						</td>
-						<td>
-							<div class="puzzle-clues-down">
-								<div class="puzzle-across-header">Down</div>
-							</div>
-						</td>
-					</tr>
-				</table>
+			<div class="ctrl-container">
+				<input id="cbAnswers" type="checkbox"/>
+				<label for="cbAnswers">Anwsers</label>
+				<input id="cbDiagramless" type="checkbox"/>
+				<label for="cbDiagramless">Diagramless</label>
 			</div>
+		</div>
+		<div class="puzzle-container"></div>
+		<div class="puzzle-clues">
+			<table>
+				<tr>
+					<td>
+						<div class="puzzle-clues-across">
+							<div class="puzzle-across-header">Across</div>
+						</div>
+					</td>
+					<td>
+						<div class="puzzle-clues-down">
+							<div class="puzzle-across-header">Down</div>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</body>
 </html>
