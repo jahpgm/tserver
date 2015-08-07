@@ -1,44 +1,66 @@
-/******************************************************************************
-	General Notes:
-		It appears that all modern browsers support the single line flex
-		notation:
-			flex: nGrow nShrink basis;
-		EXCEPT safari (desktop) which uses...ummm...something else :(
-******************************************************************************/
+/*Copyright 2015 Julian H., Inc. All rights reserved.*/
 (function ($)
 {
-	/**** Platform checks ****/
-	var ua = navigator.userAgent;
-	var PlatformCheck = 
-	{
-		"isIE": (ua.match(".*Trident.*") != null),
-		"isFirefox": (ua.match(".*Firefox.*") != null),
-		"isAndroid": (ua.match(".*Andoid.*") != null),
-		"isChrome": (ua.match(".*Chrome.*") != null),
-		"isiPad": (ua.match(".*iPad.*") != null),
-		"isiPhone": (ua.match(".*iPhone.*") != null)
-	}
-	$.extend(PlatformCheck, 
-	{
-		"isSafari":(ua.match(".*Safari.*") && !PlatformCheck.isChrome),
-		"isIOS": (PlatformCheck.isiPad || PlatformCheck.isiPhone),
-		"isMobile": (PlatformCheck.isIOS || PlatformCheck.isAndroid)
-	});
-
+	//Prototype for flexbox widget.
 	var oBoxProto =
 	{
 		options:
 		{
-			"inline": false,
-			"reverse": false,
+			"display":"box",
 			"direction": "row",
-			"justifycontent": "flex-start",
-			"alignitems": "stretch",
-			"aligncontent": "flex-start", /*funky...in Chrome/Safari, takes precedence over alignitems.  In <FF28 no working at all because wrap no work.*/
+			"justify": "start",
+			"alignItems": "start",
+			"alignContent": "start", /*funky...in Chrome/Safari, takes precedence over alignitems.  In <FF28 no working at all because wrap no work.*/
 			"wrap": "nowrap", /* funky...no work in <ff28*/
-			"updated":null, /*'boxupdated' event callback*/
+			"updated":null /*'boxupdated' event callback*/
+		},
 
-			"null": null
+		/*Defined static classes for Flex containers*/
+		_flexClasses:
+		{
+			"display":
+			{
+				"box":"flex-box",
+				"boxInline":"flex-box-inline"
+			},
+			"direction":
+			{
+				"row":"flex-row",
+				"rowReverse":"flex-row-reverse",
+				"column":"flex-column",
+				"columnReverse":"flex-column-reverse"
+			},
+			"wrap":
+			{
+				"nowrap":"flex-nowrap",
+				"wrap":"flex-wrap",
+				"wrapReverse":"flex-wrap-reverse"
+			},
+			"justify":
+			{
+				"start":"flex-justify-start",
+				"end":"flex-justify-end",
+				"center":"flex-justify-center",
+				"spaceBetween":"flex-justify-space-between",
+				"spaceAround":"flex-justify-space-around"
+			},
+			"alignItems":
+			{
+				"start":"flex-align-items-start",
+				"end":"flex-align-items-end",
+				"center":"flex-align-items-center",
+				"stretch":"flex-align-items-stretch",
+				"baseline":"flex-align-items-baseline"
+			},
+			"alignContent":
+			{
+				"start":"flex-align-content-start",
+				"end":"flex-align-content-end",
+				"center":"flex-align-content-center",
+				"stretch":"flex-align-content-stretch",
+				"spaceBetween":"flex-align-content-space-between",
+				"spaceAround":"flex-align-content-space-around"
+			}
 		},
 
 		_create: function()
@@ -59,148 +81,47 @@
 
 		_updateOptions: function()
 		{
+			//Remove existing classes.
+			this._cleanup();
+			
+			//Apply the currently selected option css classes.
 			var options = this.options;
-			var direction = (options.direction == "column") ? "column" : "row";
-			direction += options.reverse ? "-reverse" : "";
-
-			var justify = options.justifycontent;
-			if (justify == "flex-start")
-				justify = "start"
-			else
-			if (justify == "flex-end")
-				justify = "end"
-			else
-			if (justify == "space-between" || justify == "space-around")
-				justify = "justify"
-
-			var align = options.alignitems;
-			if (align == "flex-start")
-				align = "start"
-			else
-			if (align == "flex-end")
-				align = "end"
-
-			var aligncontent = options.justifycontent;
-			if (aligncontent == "flex-start")
-				aligncontent = "start"
-			else
-			if (aligncontent == "flex-end")
-				aligncontent = "end"
-			else
-			if (aligncontent == "space-between")
-				aligncontent = "justify";
-			else
-			if (aligncontent == "space-around")
-				aligncontent = "distribute";
-
-			var cssOptions = 
+			for(var key in options)
 			{
-				/* box (for Apple see after this call...it has to be handled differently. */
-				"display": "-moz-box",
-				"display": options.inline ? "-ms-inline-flexbox" : "-ms-flexbox",
-				"display": options.inline ? "inline-flex" : "flex",
+				var classes = this._flexClasses[key];
+				if(classes)
+					this.element.addClass(classes[options[key]]);
+			}
 
-				/* direction/orientation */
-				"-webkit-box-orient": (options.direction == "column") ? "vertical" : "horizontal",
-				"-moz-box-orient": (options.direction == "column") ? "vertical" : "horizontal",
-				"-webkit-flex-direction": direction,
-				"-ms-flex-direction": direction,
-				"flex-direction": direction,
-
-				/* moz/webkit orientation direction (normal/reverse) */
-				"-webkit-box-direction": (options.reverse) ? "reverse" : "normal",
-				"-moz-box-direction": (options.reverse) ? "reverse" : "normal",
-
-				/* can the content wrap */
-				"-webkit-flex-wrap": options.wrap,
-				"-ms-flex-wrap": options.wrap,
-				"flex-wrap": options.wrap,
-    
-				/* justification */
-				"-webkit-box-pack": justify,
-				"-moz-box-pack": justify,
-				"-webkit-justify-content": options.justifycontent,
-				"-ms-flex-pack": (options.justifycontent == "space-around") ? "distribute" : justify,
-				"justify-content": options.justifycontent,
-
-				/* alignment */
-				"-webkit-box-align": align,
-				"-moz-box-align": align,
-				"-webkit-align-items": options.alignitems,
-				"-ms-flex-align": align,
-				"align-items": options.alignitems,
-
-				/* content alignment */
-				"-webkit-align-content": options.aligncontent,
-				"-ms-flex-line-pack": aligncontent,
-				"align-content": options.aligncontent,
-
-				/*dummy*/
-				"null": "null"
-			};
-
-			/*Setup box display for Apple*/
-			if(PlatformCheck.isIOS)
-				cssOptions.display = options.inline ? "-webkit-inline-flex" : "-webkit-flex";
-			else
-			if(PlatformCheck.isSafari)
-				cssOptions.display = "-webkit-box";
-
-			//Apply the css.
-			this.element.css(cssOptions);
+			//copy the new options so they can be removed next time.
+			this.element.data("flexOptions", $.extend({}, options));
 
 			//Emit event for interested parties to know when box has changed.
 			this._trigger("updated", null, this.options);
 		},
 
+		_cleanup: function()
+		{
+			//Remove existing flex option classes.
+			var oldOptions = this.element.data("flexOptions");
+			for(var key in oldOptions)
+			{
+				var classes = this._flexClasses[key];
+				if(classes)
+					this.element.removeClass(classes[oldOptions[key]]);
+			}
+		},
+
 		_destroy: function()
 		{
-			//Remove all box specific styling.
-			this.element.css(
-			{
-				/* remove flexing */
-				"display": "",
-
-				/* direction/orientation */
-				"-webkit-box-orient": "",
-				"-moz-box-orient": "",
-				"-webkit-flex-direction": "",
-				"-ms-flex-direction": "",
-				"flex-direction": "",
-
-				/* moz/webkit orientation direction (normal/reverse) */
-				"-webkit-box-direction": "",
-				"-moz-box-direction": "",
-
-				/* justification */
-				"-webkit-box-pack": "",
-				"-moz-box-pack": "",
-				"-webkit-justify-content": "",
-				"-ms-flex-pack": "",
-				"justify-content": "",
-
-				/* alignment */
-				"-webkit-box-align": "",
-				"-moz-box-align": "",
-				"-webkit-align-items": "",
-				"-ms-flex-align": "",
-				"align-items": "",
-
-				/* content alignment */
-				"-webkit-align-content": "",
-				"-ms-flex-line-pack": "",
-				"align-content": "",
-
-				/*dummy*/
-				"null": "null"
-			});
-		
+			this._cleanup();
 			//Call base Widget.
 			this._super();
 		}
 	};
-	$.widget("flex.box", $.Widget, oBoxProto);
+	$.widget("flex.flexbox", $.Widget, oBoxProto);
 	
+	//Prototype for flexitem widget.
 	var oBoxChildProto =
 	{
 		options:
@@ -210,9 +131,7 @@
 			"basis":"auto",
 			"order":0,
 			"alignself":"auto",
-			"updated":null, /*boxchildupdated event callback*/
-
-			"null": null
+			"updated":null /*boxchildupdated event callback*/
 		},
 
 		_create: function()
@@ -236,7 +155,6 @@
 		{
 			var options = this.options;
 			var flex = options.grow + " " + options.shrink + " " + options.basis;
-			
 			var cssOptions = 
 			{
 				/*How are we flexing */
@@ -261,24 +179,8 @@
 				"null": null
 			}
 		
-			//If we are safari (desktop) and our parent element is an ibi-box we have to set the height/width?...I think?...maybe?
-			var parentBox = this.element.parent().data("ibi-box");
-			if(parentBox && PlatformCheck.isSafari && !PlatformCheck.isIOS)
-			{
-				var dimension = (parentBox.options.direction == "row") ? "width" : "height";
-				cssOptions[dimension] = options.basis;
-			}
-
 			//Apply the css.
 			this.element.css(cssOptions);
-
-			//If we are safari and our parent element is an ibi-box.
-			var parentBox = this.element.parent().data("ibi-box");
-			if(parentBox && PlatformCheck.isSafari)
-			{
-				var dimension = (parentBox.options.direction == "row") ? "width" : "height";
-				this.element.css({dimension : options.basis});
-			}
 
 			//Emit event for interested parties to know when boxchild has changed.
 			this._trigger("updated", null, this.options);
@@ -305,25 +207,14 @@
 
 				"-webkit-align-self": "",
 				"-ms-flex-item-align": "",
-				"align-self": "",
-
-				/*dummy*/
-				"null": null
+				"align-self": ""
 			});
 
-			//If we are safari and our parent element is an ibi-box.
-			var parentBox = this.element.parent().data("ibi-box");
-			if(parentBox && PlatformCheck.isSafari)
-			{
-				var dimension = (parentBox.options.direction == "row") ? "width" : "height";
-				this.element.css({dimension : ""});
-			}
-		
 			//Call base Widget.
 			this._superApply(arguments);
 		}
 	};
-	$.widget("flex.boxchild", $.Widget, oBoxChildProto);
+	$.widget("flex.flexitem", $.Widget, oBoxChildProto);
 
 	/****
 		Statically initialize any markup that has boxes defined "role='ibi-box'/'ibi-boxchild'/etc
@@ -331,16 +222,16 @@
 	****/
 	$(function()
 	{
-		$("[data-role-ibi *= 'box-parent']").each(function(idx, elt)
+		$("[data-role-flexbox *= 'box']").each(function(idx, elt)
 		{
 			var $this = $(this);
-			$.flex.box($this.data(), $this);
+			$.flex.flexbox($this.data(), $this);
 		});
 
-		$("[data-role-ibi *= 'box-child']").each(function(idx, elt)
+		$("[data-role-flexbox *= 'item']").each(function(idx, elt)
 		{
 			var $this = $(this);
-			$.flex.boxchild($this.data(), $this);
+			$.flex.flexitem($this.data(), $this);
 		});
 	});
 })(jQuery);

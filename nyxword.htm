@@ -34,15 +34,13 @@
 			.puzzle-selection *{vertical-align: middle;}
 			.puzzle-selection .date-picker{width: 105px;}
 			.puzzle-selection .ctrl-container{margin-top:5px;}
-
+			.puzzle-clues a{visibility:hidden;}
 			.puzzle-clues-across, .puzzle-clues-down, td
 			{
 				font-family:Arial;
 				font-size:7pt;
 				vertical-align:top;
 			}
-			.puzzle-clues a{visibility:hidden;}
-
 			.puzzle-across-header
 			{
 				font-size:9pt;
@@ -56,10 +54,11 @@
 			}
 		</style>
 
-		<link rel="stylesheet" href="./widget_box.css">
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+
+		<link rel="stylesheet" href="./widget_box.css">
 		<script src="./widget_box.js"></script>
 
 		<script type="text/javascript">
@@ -81,14 +80,15 @@
 						"dataType":"html",
 						"success":function(puzzlePage)
 						{
-							puzzlePage = puzzlePage.replace(/: /g, "");
+							puzzlePage = puzzlePage.replace(/ : <a/g, "<a");
 							var $puzzPage = $(puzzlePage);
 							var $puzzTab = $puzzPage.find("#CPHContent_PuzTable");
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright");
 
-							var $puzzSelection = $(".puzzle-selection").boxchild();
-							var $puzzContainer = $(".puzzle-container").boxchild().empty();
+							var $puzzSelection = $(".puzzle-selection");
+
+							var $puzzContainer = $(".puzzle-container").empty();
 							$puzzContainer.append($puzzTitle);
 							$puzzContainer.append($puzzTab);
 							$puzzContainer.append($puzzCRight);
@@ -97,13 +97,7 @@
 							var $cluesAcross = $(".puzzle-clues-across").append($puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").append($puzzPage.find("#CPHContent_DownClues"));
 						
-							var options = 
-							{
-								"direction":"row",
-								"justifycontent":"center",
-								"alignitems":"center"
-							}
-							$(".puzzle-page-container").box(options);
+							var $puzzlePageContainer = $(".puzzle-page-container");
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -135,11 +129,40 @@
 				{
 					window.print();
 				});
+
+				var dlgSel = $("#dlgPuzzSel");
+				dlgSel.flexbox({"direction":"column"}).css({"display":"hidden", "width":"250px", "border":"2px solid black", "padding":"10px"});
+
+				var boxDateOptions = $("#puzzDateOptions").css("marginBottom", 10);;
+				boxDateOptions.flexbox({}).flexitem({"grow":1}).css("border", "1px solid red");
+
+				var puzzDate = $("#puzzDate");
+				puzzDate.css({"maxWidth":"50px"});
 			});
 		</script>
 	</head>
 	<body>
+		
+		<div id="dlgPuzzSel" data-role-flexbox="box">
+			<div id="puzzDateOptions" data-role-flexbox="box, item">
+				<label for="puzzDate" data-role-flexbox="item">Puzzle Date:</label>
+				<input id="puzzDate" data-role-flexbox="item" type="text" readonly="">
+				<button id="btnPuzzPrint" data-role-flexbox="item">Print...</button>
+			</div>
+			<div id="puzzOptions" data-role-flexbox="box, item">
+				<input id="showAnswers" type="checkbox" data-role-flexbox="item"/>
+				<label for="showAnswers" data-role-flexbox="item">Anwsers</label>
+				<input id="makeDiagramless" type="checkbox" data-role-flexbox="item"/>
+				<label for="makeDiagramless" data-role-flexbox="item">Diagramless</label>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var flexBox = $("#boxTest").flexbox({"direction":"row", "justify":"center", "alignItems":"center"})
+		</script>
+
 		<div class="puzzle-page-container">
+
 			<div class="puzzle-selection">
 				<div>
 					Puzzle Date: <input type="text" class="date-picker" readonly="">
@@ -152,23 +175,25 @@
 					<label for="cbDiagramless">Diagramless</label>
 				</div>
 			</div>
-			<div class="puzzle-container"></div>
-			<div class="puzzle-clues">
-				<table>
-					<tr>
-						<td>
-							<div class="puzzle-clues-across">
-								<div class="puzzle-across-header">Across</div>
-							</div>
-						</td>
-						<td>
-							<div class="puzzle-clues-down">
-								<div class="puzzle-across-header">Down</div>
-							</div>
-						</td>
-					</tr>
-				</table>
+
+			<div class="puzzle-container">
 			</div>
+
+			<table class="puzzle-clues">
+				<tr>
+					<td>
+						<div class="puzzle-clues-across">
+							<div class="puzzle-across-header">Across</div>
+						</div>
+					</td>
+					<td>
+						<div class="puzzle-clues-down">
+							<div class="puzzle-across-header">Down</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+
 		</div>
 	</body>
 </html>
