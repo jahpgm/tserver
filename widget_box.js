@@ -4,53 +4,6 @@
 	//Prototype for flexbox widget.
 	var oBoxProto =
 	{
-		"_flexClasses":
-		{
-			"display":
-			{
-				"box":"flex-box",
-				"boxInline":"flex-box-inline"
-			},
-			"direction":
-			{
-				"row":"flex-row",
-				"rowReverse":"flex-row-reverse",
-				"column":"flex-column",
-				"columnReverse":"flex-column-reverse"
-			},
-			"wrap":
-			{
-				"nowrap":"flex-nowrap",
-				"wrap":"flex-wrap",
-				"wrapReverse":"flex-wrap-reverse"
-			},
-			"justify":
-			{
-				"start":"flex-justify-start",
-				"end":"flex-justify-end",
-				"center":"flex-justify-center",
-				"spaceBetween":"flex-justify-space-between",
-				"spaceAround":"flex-justify-space-around"
-			},
-			"alignItems":
-			{
-				"start":"flex-align-items-start",
-				"end":"flex-align-items-end",
-				"center":"flex-align-items-center",
-				"stretch":"flex-align-items-stretch",
-				"baseline":"flex-align-items-baseline"
-			},
-			"alignContent":
-			{
-				"start":"flex-align-content-start",
-				"end":"flex-align-content-end",
-				"center":"flex-align-content-center",
-				"stretch":"flex-align-content-stretch",
-				"spaceBetween":"flex-align-content-space-between",
-				"spaceAround":"flex-align-content-space-around"
-			}
-		},
-
 		options:
 		{
 			"display":"box",
@@ -66,10 +19,10 @@
 		{
 			var data = this.element.data();
 			var options = this.options;
-			options.direction = data.flexboxDirection || options.direction;
-			options.justify = data.flexboxJustify || options.justify;
-			options.alignItems = data.flexboxAlignItems || options.alignItems;
-			options.alignContent = data.flexboxAlignContent || options.alignContent;
+			options.direction = data.flexDirection || options.direction;
+			options.justify = data.flexJustify || options.justify;
+			options.alignItems = data.flexAlignItems || options.alignItems;
+			options.alignContent = data.flexAlignContent || options.alignContent;
 			options.wrap = data.flexWrap || options.wrap;
 			this._updateOptions();
 		},
@@ -190,11 +143,11 @@
 		{
 			var data = this.element.data();
 			var options = this.options;
-			options.grow = data.flexitemGrow || options.grow;
-			options.shrink = data.flexitemShrink || options.shrink;
-			options.basis = data.flexitemBasis || options.basis;
-			options.order = data.flexitemOrder || options.order;
-			options.alignSelf = data.flexitemAlignSelf || options.alignSelf;
+			options.grow = data.flexGrow || options.grow;
+			options.shrink = data.flexShrink || options.shrink;
+			options.basis = data.flexBasis || options.basis;
+			options.order = data.flexOrder || options.order;
+			options.alignSelf = data.flexAlignSelf || options.alignSelf;
 			this._updateOptions();
 		},
 

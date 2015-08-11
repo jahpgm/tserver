@@ -63,7 +63,7 @@
 
 			@media print
 			{
-				.puzzle-selection{display: none;}
+				#dlgPuzzSel{display: none;}
 			}
 		</style>
 
@@ -138,7 +138,7 @@
 					$(".letter").css("display", (this.checked) ? "inherit" : "none");
 				});
 
-				$("#btnPrint").on("click", function(e)
+				$("#btnPuzzPrint").on("click", function(e)
 				{
 					window.print();
 				});
@@ -155,13 +155,13 @@
 	</head>
 	<body>
 		<div class="puzzle-page-container">
-			<div id="dlgPuzzSel" data-role-flexbox="box" data-flexbox-direction="column" data-flexbox-justify="center" data-flexbox-align-items="stretch">
-				<div id="boxDateOptions" data-role-flexbox="box, item" data-flexitem-grow="1" data-flexbox-align-items="center">
+			<div id="dlgPuzzSel" data-role-flexbox="box" data-flex-direction="column" data-flex-justify="center" data-flex-align-items="stretch">
+				<div id="boxDateOptions" data-role-flexbox="box, item" data-flex-grow="1" data-flex-align-items="center">
 					<label id="puzzDateLabel" for="puzzDate" data-role-flexbox="item">Puzzle Date:</label>
-					<input id="puzzDate" data-role-flexbox="item" data-flexitem-shrink="1" data-flexitem-grow="1" type="text" readonly="">
+					<input id="puzzDate" data-role-flexbox="item" data-flex-shrink="1" data-flex-grow="1" type="text" readonly="">
 					<button id="btnPuzzPrint" data-role-flexbox="item">Print...</button>
 				</div>
-				<div id="boxMoreOptions" data-role-flexbox="box, item" data-flexitem-grow="1" data-flexbox-align-items="center">
+				<div id="boxMoreOptions" data-role-flexbox="box, item" data-flex-grow="1" data-flex-align-items="center" data-flex-align-self="flex-end">
 					<input id="showAnswers" type="checkbox" data-role-flexbox="item"/>
 					<label id="showAnswersLabel" for="showAnswers" data-role-flexbox="item">Anwsers</label>
 					<input id="makeDiagramless" type="checkbox" data-role-flexbox="item"/>
