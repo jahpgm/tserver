@@ -4,19 +4,7 @@
 	//Prototype for flexbox widget.
 	var oBoxProto =
 	{
-		options:
-		{
-			"display":"box",
-			"direction": "row",
-			"justify": "start",
-			"alignItems": "start",
-			"alignContent": "start", /*funky...in Chrome/Safari, takes precedence over alignitems.  In <FF28 no working at all because wrap no work.*/
-			"wrap": "nowrap", /* funky...no work in <ff28*/
-			"updated":null /*'boxupdated' event callback*/
-		},
-
-		/*Defined static classes for Flex containers*/
-		_flexClasses:
+		"_flexClasses":
 		{
 			"display":
 			{
@@ -63,8 +51,26 @@
 			}
 		},
 
+		options:
+		{
+			"display":"box",
+			"direction": "row",
+			"justify": "start",
+			"alignItems": "start",
+			"alignContent": "start", /*funky...in Chrome/Safari, takes precedence over alignitems.  In <FF28 no working at all because wrap no work.*/
+			"wrap": "nowrap", /* funky...no work in <ff28*/
+			"updated":null /*'boxupdated' event callback*/
+		},
+
 		_create: function()
 		{
+			var data = this.element.data();
+			var options = this.options;
+			options.direction = data.flexboxDirection || options.direction;
+			options.justify = data.flexboxJustify || options.justify;
+			options.alignItems = data.flexboxAlignItems || options.alignItems;
+			options.alignContent = data.flexboxAlignContent || options.alignContent;
+			options.wrap = data.flexWrap || options.wrap;
 			this._updateOptions();
 		},
 
@@ -88,7 +94,7 @@
 			var options = this.options;
 			for(var key in options)
 			{
-				var classes = this._flexClasses[key];
+				var classes = $.flex.flexbox._flexClasses[key];
 				if(classes)
 					this.element.addClass(classes[options[key]]);
 			}
@@ -106,7 +112,7 @@
 			var oldOptions = this.element.data("flexOptions");
 			for(var key in oldOptions)
 			{
-				var classes = this._flexClasses[key];
+				var classes = $.flex.flexbox._flexClasses[key];
 				if(classes)
 					this.element.removeClass(classes[oldOptions[key]]);
 			}
@@ -120,6 +126,52 @@
 		}
 	};
 	$.widget("flex.flexbox", $.Widget, oBoxProto);
+	$.flex.flexbox._flexClasses = 
+	{
+		"display":
+		{
+			"box":"flex-box",
+			"boxInline":"flex-box-inline"
+		},
+		"direction":
+		{
+			"row":"flex-row",
+			"rowReverse":"flex-row-reverse",
+			"column":"flex-column",
+			"columnReverse":"flex-column-reverse"
+		},
+		"wrap":
+		{
+			"nowrap":"flex-nowrap",
+			"wrap":"flex-wrap",
+			"wrapReverse":"flex-wrap-reverse"
+		},
+		"justify":
+		{
+			"start":"flex-justify-start",
+			"end":"flex-justify-end",
+			"center":"flex-justify-center",
+			"spaceBetween":"flex-justify-space-between",
+			"spaceAround":"flex-justify-space-around"
+		},
+		"alignItems":
+		{
+			"start":"flex-align-items-start",
+			"end":"flex-align-items-end",
+			"center":"flex-align-items-center",
+			"stretch":"flex-align-items-stretch",
+			"baseline":"flex-align-items-baseline"
+		},
+		"alignContent":
+		{
+			"start":"flex-align-content-start",
+			"end":"flex-align-content-end",
+			"center":"flex-align-content-center",
+			"stretch":"flex-align-content-stretch",
+			"spaceBetween":"flex-align-content-space-between",
+			"spaceAround":"flex-align-content-space-around"
+		}
+	};
 	
 	//Prototype for flexitem widget.
 	var oBoxChildProto =
@@ -130,17 +182,19 @@
 			"shrink":0,
 			"basis":"auto",
 			"order":0,
-			"alignself":"auto",
+			"alignSelf":"auto",
 			"updated":null /*boxchildupdated event callback*/
 		},
 
 		_create: function()
 		{
-			/****
-				We make this positioned relative so you can have child divs that work as scroll containers...
-				(position:absolute;width:100%;height:100%;overflow:auto;-webkit-overflow-scrolling:touch)
-			****/
-			this.element.css("position", "relative");
+			var data = this.element.data();
+			var options = this.options;
+			options.grow = data.flexitemGrow || options.grow;
+			options.shrink = data.flexitemShrink || options.shrink;
+			options.basis = data.flexitemBasis || options.basis;
+			options.order = data.flexitemOrder || options.order;
+			options.alignSelf = data.flexitemAlignSelf || options.alignSelf;
 			this._updateOptions();
 		},
 
@@ -171,9 +225,9 @@
 				"order": options.order,
 
 				/*we can override the parent's align option*/
-				"-webkit-align-self": options.alignself,
-				"-ms-flex-item-align": (options.alignself == "flex-start") ? "start" : "end",
-				"align-self": options.alignself,
+				"-webkit-align-self": options.alignSelf,
+				"-ms-flex-item-align": (options.alignSelf == "flex-start") ? "start" : "end",
+				"align-self": options.alignSelf,
 
 				/*dummy*/
 				"null": null
@@ -217,7 +271,7 @@
 	$.widget("flex.flexitem", $.Widget, oBoxChildProto);
 
 	/****
-		Statically initialize any markup that has boxes defined "role='ibi-box'/'ibi-boxchild'/etc
+		Statically initialize any markup that has boxes defined "role='box'/'item'/etc
 		Construct out widgets via the namespaces to avoid conflicts.
 	****/
 	$(function()

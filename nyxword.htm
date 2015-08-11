@@ -48,6 +48,19 @@
 				padding:10px 0px 5px 0px;
 			}
 
+			#dlgPuzzSel
+			{
+				z-index:1000;
+				width:250px;
+				font-family:Arial;
+				font-size:9pt;
+				background-color:white;
+				border:1px solid black;
+				padding:7px;
+				margin-bottom:10px;
+				box-shadow: 5px 5px 5px gray;
+			}
+
 			@media print
 			{
 				.puzzle-selection{display: none;}
@@ -107,20 +120,20 @@
 				}
 
 				var date = new Date();
-				$(".date-picker").datepicker().datepicker("setDate", date).on("change", function(e)
+				$("#puzzDate").datepicker().datepicker("setDate", date).on("change", function(e)
 				{
 					var date = $(e.target).datepicker("getDate");
 					LoadPuzzle(date);
 				});
 				LoadPuzzle(date);
 
-				$("#cbDiagramless").on("change", function(e)
+				$("#makeDiagramless").on("change", function(e)
 				{
 					$(".vblack").css("backgroundColor", (this.checked) ? "white" : "black");
 					var idx = $(".num").css("color", (this.checked) ? "white" : "black").index();
 				});
 				
-				$("#cbAnswers").on("change", function(e)
+				$("#showAnswers").on("change", function(e)
 				{
 					$(".letter").css("display", (this.checked) ? "inherit" : "none");
 				});
@@ -130,49 +143,29 @@
 					window.print();
 				});
 
-				var dlgSel = $("#dlgPuzzSel");
-				dlgSel.flexbox({"direction":"column"}).css({"display":"hidden", "width":"250px", "border":"2px solid black", "padding":"10px"});
-
-				var boxDateOptions = $("#puzzDateOptions").css("marginBottom", 10);;
-				boxDateOptions.flexbox({}).flexitem({"grow":1}).css("border", "1px solid red");
-
-				var puzzDate = $("#puzzDate");
-				puzzDate.css({"maxWidth":"50px"});
+				var dlgPuzzSel = $("#dlgPuzzSel").css({"height":"auto", "width":"300px"}).draggable();
+				var puzzDateLabel = $("#puzzDateLabel").css({"marginRight":"3px"});
+				var boxDateOptions = $("#boxDateOptions").css({"marginBottom":"7px", "border":"0px solid red"});
+				var puzzDate = $("#puzzDate").css({"minWidth":"20px", "marginRight":"7px"});
+				var puzzPrint = $("#btnPuzzPrint");
+				var boxMoreOptions = $("#boxMoreOptions").css({"border":"0px solid green"});
+				var showAnswersLabel = $("#showAnswersLabel").css({"margin-right": "7px"});
 			});
 		</script>
 	</head>
 	<body>
-		
-		<div id="dlgPuzzSel" data-role-flexbox="box">
-			<div id="puzzDateOptions" data-role-flexbox="box, item">
-				<label for="puzzDate" data-role-flexbox="item">Puzzle Date:</label>
-				<input id="puzzDate" data-role-flexbox="item" type="text" readonly="">
-				<button id="btnPuzzPrint" data-role-flexbox="item">Print...</button>
-			</div>
-			<div id="puzzOptions" data-role-flexbox="box, item">
-				<input id="showAnswers" type="checkbox" data-role-flexbox="item"/>
-				<label for="showAnswers" data-role-flexbox="item">Anwsers</label>
-				<input id="makeDiagramless" type="checkbox" data-role-flexbox="item"/>
-				<label for="makeDiagramless" data-role-flexbox="item">Diagramless</label>
-			</div>
-		</div>
-
-		<script type="text/javascript">
-			var flexBox = $("#boxTest").flexbox({"direction":"row", "justify":"center", "alignItems":"center"})
-		</script>
-
 		<div class="puzzle-page-container">
-
-			<div class="puzzle-selection">
-				<div>
-					Puzzle Date: <input type="text" class="date-picker" readonly="">
-					<button id="btnPrint">Print...</button>
+			<div id="dlgPuzzSel" data-role-flexbox="box" data-flexbox-direction="column" data-flexbox-justify="center" data-flexbox-align-items="stretch">
+				<div id="boxDateOptions" data-role-flexbox="box, item" data-flexitem-grow="1" data-flexbox-align-items="center">
+					<label id="puzzDateLabel" for="puzzDate" data-role-flexbox="item">Puzzle Date:</label>
+					<input id="puzzDate" data-role-flexbox="item" data-flexitem-shrink="1" data-flexitem-grow="1" type="text" readonly="">
+					<button id="btnPuzzPrint" data-role-flexbox="item">Print...</button>
 				</div>
-				<div class="ctrl-container">
-					<input id="cbAnswers" type="checkbox"/>
-					<label for="cbAnswers">Anwsers</label>
-					<input id="cbDiagramless" type="checkbox"/>
-					<label for="cbDiagramless">Diagramless</label>
+				<div id="boxMoreOptions" data-role-flexbox="box, item" data-flexitem-grow="1" data-flexbox-align-items="center">
+					<input id="showAnswers" type="checkbox" data-role-flexbox="item"/>
+					<label id="showAnswersLabel" for="showAnswers" data-role-flexbox="item">Anwsers</label>
+					<input id="makeDiagramless" type="checkbox" data-role-flexbox="item"/>
+					<label for="makeDiagramless" data-role-flexbox="item">Diagramless</label>
 				</div>
 			</div>
 
@@ -193,7 +186,6 @@
 					</td>
 				</tr>
 			</table>
-
 		</div>
 	</body>
 </html>
