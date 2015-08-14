@@ -12,8 +12,8 @@
 			.vblack {background-color:#000000;visibility:visible;}
 			.num{height:6pt;font-family:arial;font-size:6pt;visibility:visible}
 			.letter{height:100%;width:100%;font-family:helvetica;font-size:8pt;text-align:center;display:none;}
-			.subst{font-family:verdana;font-size:8pt;text-align:center;display:normal;}
-			.subst2{font-family:verdana;font-size:6pt;text-align:center;display:normal;}
+			.subst{font-family:verdana;font-size:8pt;text-align:center;display:none;}
+			.subst2{font-family:verdana;font-size:6pt;text-align:center;display:none;}
 			.copy{font-family:Arial;font-weight:bold;font-size:7pt;}
 
 			.PuzTable {margin-bottom:0px;border-collapse:collapse;}
@@ -111,6 +111,9 @@
 							var $cluesDown = $(".puzzle-clues-down").append($puzzPage.find("#CPHContent_DownClues"));
 						
 							var $puzzlePageContainer = $(".puzzle-page-container");
+
+							$("#showAnswers").prop("checked", false);
+							$("#makeDiagramless").prop("checked", false);
 						},
 						"error":function(xhr, strError, strMessage)
 						{
