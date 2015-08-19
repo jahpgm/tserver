@@ -107,8 +107,8 @@
 							$puzzContainer.append($puzzCRight);
 							
 							var $puzzClues = $(".puzzle-clues");
-							var $cluesAcross = $(".puzzle-clues-across").append($puzzPage.find("#CPHContent_AcrossClues"));
-							var $cluesDown = $(".puzzle-clues-down").append($puzzPage.find("#CPHContent_DownClues"));
+							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzPage.find("#CPHContent_AcrossClues"));
+							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzPage.find("#CPHContent_DownClues"));
 						
 							var $puzzlePageContainer = $(".puzzle-page-container");
 
