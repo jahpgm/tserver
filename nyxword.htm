@@ -34,13 +34,15 @@
 			.puzzle-selection *{vertical-align: middle;}
 			.puzzle-selection .date-picker{width: 105px;}
 			.puzzle-selection .ctrl-container{margin-top:5px;}
-			.puzzle-clues a{visibility:hidden;}
-			.puzzle-clues-across, .puzzle-clues-down, td
+			.puzzle-clues a{display:none;}
+			.puzzle-clues td{vertical-align:top;}
+			.puzzle-clues-across, .puzzle-clues-down
 			{
 				font-family:Arial;
 				font-size:7pt;
-				vertical-align:top;
+				margin-left:20px
 			}
+
 			.puzzle-across-header, .puzzle-down-header
 			{
 				font-size:9pt;
@@ -51,7 +53,7 @@
 			#dlgPuzzSel
 			{
 				z-index:1000;
-				width:250px;
+				width:300px;
 				font-family:Arial;
 				font-size:8pt;
 				background-color:white;
@@ -64,6 +66,23 @@
 			@media print
 			{
 				#dlgPuzzSel{display: none;}
+			}
+			@media print and (orientation: portrait)
+			{
+			}
+			@media print and (orientation: landscape)
+			{
+				.puzzle-page-container
+				{
+					margin-top: 24pt;
+				}
+
+				.puzzle-container, .puzzle-clues
+				{
+					width:auto;
+					display:inline-block;
+					vertical-align:top;
+				}
 			}
 		</style>
 
@@ -111,7 +130,7 @@
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
-							var $puzzClues = $(".puzzle-clues");
+							var $puzzClues = $(".puzzle-clues").draggable();
 							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader).append($puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader).append($puzzPage.find("#CPHContent_DownClues"));
 
@@ -151,7 +170,7 @@
 					window.print();
 				});
 
-				var dlgPuzzSel = $("#dlgPuzzSel").css({"height":"auto", "width":"300px"}).draggable();
+				var dlgPuzzSel = $("#dlgPuzzSel").draggable();
 				var puzzDateLabel = $("#puzzDateLabel").css({"min-width":"65px"});
 				var boxDateOptions = $("#boxDateOptions").css({"marginBottom":"7px", "border":"0px solid red"});
 				var puzzDate = $("#puzzDate").css({"minWidth":"20px", "marginRight":"7px"});
@@ -159,7 +178,7 @@
 				var boxMoreOptions = $("#boxMoreOptions").css({"border":"0px solid green"});
 				var showAnswersLabel = $("#showAnswersLabel").css({"margin-right": "7px"});
 				var puzzGridSizeLabel = $("#gridSizeLabel").css({"min-width":"65px"});
-				var puzzGridSize = $("#gridSize").prop("value", "24px").css("width", "35px").on("change", function(e)
+				var puzzGridSize = $("#gridSize").prop("value", "24px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
 				{
 					var gridSize = parseInt($("#gridSize").prop("value"), 10) + "px";
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
