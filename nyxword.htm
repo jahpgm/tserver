@@ -35,19 +35,19 @@
 			.puzzle-selection .date-picker{width: 105px;}
 			.puzzle-selection .ctrl-container{margin-top:5px;}
 			.puzzle-clues a{display:none;}
-			.puzzle-clues td{vertical-align:top;}
 			.puzzle-clues-across, .puzzle-clues-down
 			{
+				margin-left:20px;
+				display:inline-block;
+				max-width:2.5in;
 				font-family:Arial;
-				font-size:7pt;
-				margin-left:20px
+				font-size:8pt;
 			}
 
 			.puzzle-across-header, .puzzle-down-header
 			{
 				font-size:9pt;
 				font-weight:bold;
-				padding:10px 0px 5px 0px;
 			}
 
 			#dlgPuzzSel
@@ -61,6 +61,10 @@
 				padding:7px;
 				margin-bottom:10px;
 				box-shadow: 5px 5px 5px gray;
+			}
+
+			.puzzle-container
+			{
 			}
 
 			@media print
@@ -77,11 +81,9 @@
 					margin-top: 24pt;
 				}
 
-				.puzzle-container, .puzzle-clues
+				.puzzle-container
 				{
-					width:auto;
-					display:inline-block;
-					vertical-align:top;
+					float:left;
 				}
 			}
 		</style>
@@ -178,7 +180,7 @@
 				var boxMoreOptions = $("#boxMoreOptions").css({"border":"0px solid green"});
 				var showAnswersLabel = $("#showAnswersLabel").css({"margin-right": "7px"});
 				var puzzGridSizeLabel = $("#gridSizeLabel").css({"min-width":"65px"});
-				var puzzGridSize = $("#gridSize").prop("value", "24px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
+				var puzzGridSize = $("#gridSize").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
 				{
 					var gridSize = parseInt($("#gridSize").prop("value"), 10) + "px";
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
@@ -211,20 +213,14 @@
 			<div class="puzzle-container">
 			</div>
 
-			<table class="puzzle-clues">
-				<tr>
-					<td>
-						<div class="puzzle-clues-across">
-							<div class="puzzle-across-header">Across</div>
-						</div>
-					</td>
-					<td>
-						<div class="puzzle-clues-down">
-							<div class="puzzle-down-header">Down</div>
-						</div>
-					</td>
-				</tr>
-			</table>
+			<div class="puzzle-clues">
+				<div class="puzzle-clues-across">
+					<div class="puzzle-across-header">Across</div>
+				</div>
+				<div class="puzzle-clues-down">
+					<div class="puzzle-down-header">Down</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
