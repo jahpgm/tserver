@@ -88,6 +88,11 @@
 					float:left;
 					margin-right:25px;
 				}
+				.puzzle-container-clues-left
+				{
+					float:right;
+					margin-left:25px;
+				}
 			}
 		</style>
 
@@ -172,6 +177,11 @@
 
 				$("#btnPuzzPrint").on("click", function(e)
 				{
+					var puzzContainer = $(".puzzle-container");
+					if($("#btnCluesOnRight").prop("checked"))
+						puzzContainer.removeClass("puzzle-container-clues-left");
+					else
+						puzzContainer.addClass("puzzle-container-clues-left");
 					window.print();
 				});
 
@@ -189,6 +199,7 @@
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
 					$(this).prop("value", gridSize);
 				});
+				var cluesOnRight = $("#btnCluesOnRight").prop("checked", true);
 			});
 		</script>
 	</head>
@@ -210,6 +221,10 @@
 					<label id="showAnswersLabel" for="showAnswers" data-role-flex="item">Anwsers</label>
 					<input id="makeDiagramless" type="checkbox" data-role-flex="item"/>
 					<label for="makeDiagramless" data-role-flex="item">Diagramless</label>
+				</div>
+				<div id="boxYetMoreOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-justify="end" data-flex-align-items="center">
+					<input id="btnCluesOnRight" type="checkbox" data-role-flex="item"/>
+					<label for="btnCluesOnRight" data-role-flex="item">Landscape Clues on Right</label>
 				</div>
 			</div>
 
