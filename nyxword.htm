@@ -19,7 +19,7 @@
 
 			.PuzTable {margin-bottom:0px;border-collapse:collapse;}
 			.PuzTable td {vertical-align:top;height:14px;width:14px;border:1px solid black;padding:0px;}
-			.PuzTitle{font-family:Arial;font-weight:normal;font-size:8pt;}
+			.PuzTitle, .CPHContent_Copyright{font-family:Arial;font-weight:normal;font-size:8pt;}
 			.puzzle-selection
 			{
 				z-index:1000;
@@ -125,10 +125,11 @@
 						"success":function(puzzlePage)
 						{
 							puzzlePage = puzzlePage.replace(/ : <a/g, "<a");
+							console.log(puzzlePage);
 							var $puzzPage = $(puzzlePage);
-							var $puzzTab = $puzzPage.find("#CPHContent_PuzTable");
+							var $puzzTab = $puzzPage.find("#PuzTable");
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
-							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright");
+							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright").addClass("CPHContent_Copyright");
 
 							var $puzzSelection = $(".puzzle-selection");
 
