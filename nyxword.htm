@@ -122,7 +122,7 @@
 					{
 						"url": strUri,
 						"dataType":"html",
-						"success":function(puzzlePage)
+						"success":function(puzzlePage, status, xhr)
 						{
 							puzzlePage = puzzlePage.replace(/ : <a/g, "<a");
 							console.log(puzzlePage);
@@ -150,6 +150,12 @@
 							$("#makeDiagramless").prop("checked", false);
 
 							$("#gridSize").trigger("change");
+						
+							if(!$puzzTab.length)
+							{
+								var str = "DID YOU FORGET TO TURN OF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
+								$(document.documentElement).html(str);
+							}
 						},
 						"error":function(xhr, strError, strMessage)
 						{
