@@ -5,11 +5,11 @@ var util = require("util");
 
 function CycleNodeProc(port, server)
 {
-	this._server = server;
 	http.Server.call(this, this._onRequest);
 	this.listen(Number(port));
 	console.log("CycleNodeProc running on http://localhost:%s -> will cycle '%s'", port, server);
 
+	this._server = server;
 	this.startServer();
 }
 util.inherits(CycleNodeProc, http.Server);
@@ -30,6 +30,7 @@ _p._onRequest = function(request, response)
 	}
 };
 
+this._server = null;
 _p.startServer = function()
 {
 	this._cp = proc.fork(this._server);
@@ -41,7 +42,7 @@ _p.startServer = function()
 };
 
 /****
-	UTILITY FUNCTIONS AN MAIN
+	UTILITY FUNCTIONS AND MAIN
 ****/
 function writeln(stream, str)
 {
