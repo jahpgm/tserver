@@ -118,6 +118,7 @@
 					var date = date || $.datepicker.getDate();
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
 					var strUri = "./proxy.jsp?" + strParm;
+					//var strUri = "http://jah:8000/?uri=" + strParm;
 					var ret = $.ajax(
 					{
 						"url": strUri,
