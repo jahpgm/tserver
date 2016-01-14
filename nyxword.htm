@@ -117,15 +117,15 @@
 				{
 					var date = date || $.datepicker.getDate();
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
-					//var strUri = "./proxy.jsp?" + strParm;
-					var strUri = "http://jah:8000/?uri=" + strParm;
+					var strUri = "http://jah:8080/ibi_apps/tools/jahtest/nyxword/proxy.jsp?" + strParm;
+					//var strUri = "http://jah:8000/?uri=" + strParm;
 					var ret = $.ajax(
 					{
 						"url": strUri,
 						"dataType":"html",
 						"beforeSend":function(xhr, settings)
 						{
-							$(".puzzle-container").empty().append($("<img src='./loader.gif'>"));
+							$(".puzzle-container").html("<img src='./loader.gif'>");
 							$(".puzzle-clues").css("display", "none");
 						},
 						"success":function(puzzlePage, status, xhr)
@@ -136,37 +136,28 @@
 							var $puzzTab = $puzzPage.find("#PuzTable");
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright").addClass("CPHContent_Copyright");
-
 							var $puzzSelection = $(".puzzle-selection");
-
-							var $puzzContainer = $(".puzzle-container").empty();
-							$puzzContainer.append($puzzTitle);
-							$puzzContainer.append($puzzTab);
-							$puzzContainer.append($puzzCRight);
-							
-							
+							var $puzzContainer = $(".puzzle-container").empty().append($puzzTitle, $puzzTab, $puzzCRight);
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
 							var $puzzClues = $(".puzzle-clues").css("display", "block").draggable();
-							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader).append($puzzPage.find("#CPHContent_AcrossClues"));
-							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader).append($puzzPage.find("#CPHContent_DownClues"));
+							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find("#CPHContent_AcrossClues"));
+							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find("#CPHContent_DownClues"));
 
 							$("#showAnswers").prop("checked", false);
 							$("#makeDiagramless").prop("checked", false);
-
 							$("#gridSize").trigger("change");
 						
 							if(!$puzzTab.length)
 							{
-								var str = "DID YOU FORGET TO TURN OF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
+								var str = "DID YOU FORGET TO TURN OFF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
 								$(document.documentElement).html(str);
 							}
 						},
 						"error":function(xhr, strError, strMessage)
 						{
-							console.dir(xhr);
-							$(document.documentElement).html(xhr.responseText);
+							$(document.documentElement).html(xhr.responseText || strMessage || "Unknown AJAX error retrieving puzzle.");
 						}
 					});
 				}
