@@ -117,12 +117,17 @@
 				{
 					var date = date || $.datepicker.getDate();
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
-					var strUri = "./proxy.jsp?" + strParm;
-					//var strUri = "http://jah:8000/?uri=" + strParm;
+					//var strUri = "./proxy.jsp?" + strParm;
+					var strUri = "http://jah:8000/?uri=" + strParm;
 					var ret = $.ajax(
 					{
 						"url": strUri,
 						"dataType":"html",
+						"beforeSend":function(xhr, settings)
+						{
+							$(".puzzle-container").empty().append($("<img src='./loader.gif'>"));
+							$(".puzzle-clues").css("display", "none");
+						},
 						"success":function(puzzlePage, status, xhr)
 						{
 							puzzlePage = puzzlePage.replace(/ : <a/g, "<a");
@@ -143,7 +148,7 @@
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
-							var $puzzClues = $(".puzzle-clues").draggable();
+							var $puzzClues = $(".puzzle-clues").css("display", "block").draggable();
 							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader).append($puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader).append($puzzPage.find("#CPHContent_DownClues"));
 
@@ -160,6 +165,7 @@
 						},
 						"error":function(xhr, strError, strMessage)
 						{
+							console.dir(xhr);
 							$(document.documentElement).html(xhr.responseText);
 						}
 					});
