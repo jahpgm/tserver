@@ -113,13 +113,22 @@
 			};
 			$(function()
 			{
+				var curAjax = null;
 				function LoadPuzzle(date)
 				{
-					var date = date || $.datepicker.getDate();
+					var date = date || $("#puzzDate").datepicker("getDate");
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
-					var strUri = "http://jah:8080/ibi_apps/tools/jahtest/nyxword/proxy.jsp?" + strParm;
-					//var strUri = "http://jah:8000/?uri=" + strParm;
-					var ret = $.ajax(
+					var strUri = $("#proxyServer").prop("value");
+					switch(strUri)
+					{
+						case "proxy.jsp": strUri = "http://jah:8080/ibi_apps/tools/jahtest/nyxword/proxy.jsp?" + strParm;break;
+						case "proxy.server.js": strUri = "http://jah:8000/?uri=" + strParm;break;
+						case "none": strUri = strParm;
+					}
+
+					//Kill any current ajax request.
+					(curAjax && curAjax.abort());
+					curAjax = $.ajax(
 					{
 						"url": strUri,
 						"dataType":"html",
@@ -157,10 +166,12 @@
 						},
 						"error":function(xhr, strError, strMessage)
 						{
-							$(document.documentElement).html(xhr.responseText || strMessage || "Unknown AJAX error retrieving puzzle.");
+							$(".puzzle-container").html(xhr.responseText || strMessage || "Unknown AJAX error retrieving puzzle.");
 						}
 					});
 				}
+
+
 
 				var date = new Date();
 				$("#puzzDate").datepicker().datepicker("setDate", date).on("change", function(e)
@@ -169,6 +180,11 @@
 					LoadPuzzle(date);
 				});
 				LoadPuzzle(date);
+
+				$("#proxyServer").on("change", function(e)
+				{
+					LoadPuzzle(date);
+				});
 
 				$("#makeDiagramless").on("change", function(e)
 				{
@@ -183,22 +199,30 @@
 
 				$("#btnPuzzPrint").on("click", function(e)
 				{
-					var puzzContainer = $(".puzzle-container");
-					if($("#btnCluesOnRight").prop("checked"))
-						puzzContainer.removeClass("puzzle-container-clues-left");
+					if(e.ctrlKey)
+						LoadPuzzle();
 					else
-						puzzContainer.addClass("puzzle-container-clues-left");
-					window.print();
+					{
+						var puzzContainer = $(".puzzle-container");
+						if($("#btnCluesOnRight").prop("checked"))
+							puzzContainer.removeClass("puzzle-container-clues-left");
+						else
+							puzzContainer.addClass("puzzle-container-clues-left");
+						window.print();
+					}
 				});
 
 				var dlgPuzzSel = $("#dlgPuzzSel").draggable();
-				var puzzDateLabel = $("#puzzDateLabel").css({"min-width":"65px"});
+				var proxyServerLabel = $("#proxyServerLabel").css({"min-width":"70px"});
+				var puzzDateLabel = $("#puzzDateLabel").css({"min-width":"70px"});
+				var boxProxyOptions = $("#boxProxyOptions").css("marginBottom", "7px");
 				var boxDateOptions = $("#boxDateOptions").css({"marginBottom":"7px", "border":"0px solid red"});
+				var proxyServer = $("#proxyServer");
 				var puzzDate = $("#puzzDate").css({"minWidth":"20px", "marginRight":"7px"});
 				var puzzPrint = $("#btnPuzzPrint");
 				var boxMoreOptions = $("#boxMoreOptions").css({"border":"0px solid green"});
 				var showAnswersLabel = $("#showAnswersLabel").css({"margin-right": "7px"});
-				var puzzGridSizeLabel = $("#gridSizeLabel").css({"min-width":"65px"});
+				var puzzGridSizeLabel = $("#gridSizeLabel").css({"min-width":"70px"});
 				var puzzGridSize = $("#gridSize").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
 				{
 					var gridSize = parseInt($("#gridSize").prop("value"), 10) + "px";
@@ -216,6 +240,14 @@
 					<label id="puzzDateLabel" for="puzzDate" data-role-flex="item">Puzzle Date:</label>
 					<input id="puzzDate" data-role-flex="item" data-flex-shrink="1" data-flex-grow="1" type="text" readonly="">
 					<button id="btnPuzzPrint" data-role-flex="item">Print...</button>
+				</div>
+				<div id="boxProxyOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-align-items="center">
+					<label id="proxyServerLabel" for="proxyServer" data-role-flex="item">Proxy Server:</label>
+					<select id="proxyServer" data-role-flex="item" data-flex-shrink="1" data-flex-grow="1">
+						<option value="proxy.jsp">Apache (proxy.jsp:8080)</option>
+						<option value="proxy.server.js">Node.js (proxy.server.js:8100)</option>
+						<option value="none">None (Prolly won't work!)</option>
+					</select>
 				</div>
 				<div id="boxMoreOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-align-items="center">
 					<label id="gridSizeLabel" for="gridSize" data-role-flex="item">Grid Size:</label>

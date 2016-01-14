@@ -51,36 +51,3 @@ var server = http.createServer(function(request, response)
 	process.title = util.format("Proxy server - listening on %s", args.port);
 	console.log(util.format("Proxy server listening on http://172.1.0.1:%s/...(localhost/ServerName)", args.port))
 });
-
-
-process.on("kill", function()
-{
-	console.log("kill");
-});
-process.on("beforeExit", function()
-{
-	console.log("beforeExit");
-});
-process.on("exit", function()
-{
-	console.log("exit");
-});
-process.on("message", function(message)
-{
-	console.log("message");
-});
-process.on("rejectHandler", function()
-{
-	console.log("rejectHandler");
-});
-process.on("uncaughtException", function()
-{
-	console.log("uncaughtException");
-});
-process.on("unhandledRejection", function()
-{
-	console.log("unhandledRejection");
-});
-
-
-
