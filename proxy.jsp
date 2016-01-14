@@ -15,6 +15,7 @@ String[] serverUrls = {
 };
 %>
 <%
+response.setHeader("access-control-allow-origin", "*");
 try {
   String reqUrl = request.getQueryString();
   reqUrl = URLDecoder.decode(reqUrl);
