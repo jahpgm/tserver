@@ -122,7 +122,7 @@
 					switch(strUri)
 					{
 						case "proxy.jsp": strUri = "http://jah:8080/ibi_apps/tools/jahtest/nyxword/proxy.jsp?" + strParm;break;
-						case "proxy.server.js": strUri = "http://jah:8000/?uri=" + strParm;break;
+						case "proxy.server.js": strUri = "http://jah:8000/proxy?uri=" + strParm;break;
 						case "none": strUri = strParm;
 					}
 
@@ -245,7 +245,7 @@
 					<label id="proxyServerLabel" for="proxyServer" data-role-flex="item">Proxy Server:</label>
 					<select id="proxyServer" data-role-flex="item" data-flex-shrink="1" data-flex-grow="1">
 						<option value="proxy.jsp">Apache (proxy.jsp:8080)</option>
-						<option value="proxy.server.js">Node.js (proxy.server.js:8100)</option>
+						<option value="proxy.server.js" selected>Node.js (proxy.server.js:8000)</option>
 						<option value="none">None (Prolly won't work!)</option>
 					</select>
 				</div>
