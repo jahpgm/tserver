@@ -1,0 +1,2 @@
+16:33:4 1/15/2016 Proxy: Connecting to '/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/15/2016'
+16:33:5 1/15/2016 Proxy: Finished loading '/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/15/2016'

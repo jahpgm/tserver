@@ -1,8 +1,57 @@
 const http = require("http");
 const url = require("url");
 const util = require("util");
+const readline = require("readline");
 const args = require("./args.js");
 const fs = require("fs");
+
+console._log = console.log;
+console.log = function(strLog)
+{
+	var date = new Date();
+	(process.log_stream && process.log_stream.write(util.format("%s:%s:%s %s/%s/%s %s\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
+	console._log.call(console, strLog);
+};
+console.reset = function(){process.stdout.write("\33c");};
+
+process.stdin.on("data", function(data)
+{
+	var strData = data.toString();
+	if(strData.search("cls") == 0)
+		console.reset();
+	else
+	if(strData.search("clog") == 0)
+	{
+		var rl = readline.createInterface({input:process.stdin, output:process.stdout});
+		rl.question("Are you sure you want to clear the log file (Y/N)?", function(answer)
+		{
+			answer = answer.toLowerCase();
+			if(answer == "y" || answer == "yes")
+				OpenLog(process.filename, false);
+			this.close();	
+			this.resume();
+		}.bind(rl));
+	}
+	else
+	if(strData.search("log") == 0)
+	{
+		fs.open(process.log_name, "a+", function(err, fd)
+		{	
+			var strLog = "";
+			var rs = fs.createReadStream(null, {"fd":fd, "encoding":"utf8"})
+				.on("data", function(data){strLog += data;})
+				.on("end", function(){process.stdout.write(strLog);});
+		});
+	}
+});
+
+function OpenLog(filename, bAppend)
+{
+	process.log_name = filename || "proxy.server.log.txt";
+	process.log_fd = fs.openSync(process.log_name, bAppend ? "a+" : "w+");
+	process.log_stream = fs.createWriteStream(null, {"fd":process.log_fd});
+}
+OpenLog(args.logfile, true);
 
 var server = http.createServer(function(request, response)
 {
@@ -58,5 +107,6 @@ var server = http.createServer(function(request, response)
 }).listen(args.port, function()
 {
 	process.title = util.format("Proxy: listening on %s", args.port);
-	console.log(util.format("Proxy: listening on %s", args.port))
+	console.log(util.format("Proxy: Started and listening on %s", args.port))
 });
+
