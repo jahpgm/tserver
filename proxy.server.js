@@ -1,9 +1,9 @@
 const http = require("http");
+const fs = require("fs");
 const url = require("url");
 const util = require("util");
 const readline = require("readline");
 const args = require("./args.js");
-const fs = require("fs");
 
 console._log = console.log;
 console.log = function(strLog)
@@ -20,6 +20,16 @@ process.stdin.on("data", function(data)
 	if(strData.search("cls") == 0)
 		console.reset();
 	else
+	if(strData.search("log") == 0)
+	{
+		fs.open(process.log_name, "a+", function(err, fd)
+		{	
+			var strLog = "";
+			var rs = fs.createReadStream(null, {"fd":fd, "encoding":"utf8"})
+				.on("data", function(data){strLog += data;})
+				.on("end", function(){process.stdout.write(strLog);});
+		});
+	}
 	if(strData.search("clog") == 0)
 	{
 		var rl = readline.createInterface({input:process.stdin, output:process.stdout});
@@ -31,17 +41,6 @@ process.stdin.on("data", function(data)
 			this.close(); //supposed to do the resume below...doesn't seem to.	
 			this.resume();//see above.
 		}.bind(rl));
-	}
-	else
-	if(strData.search("log") == 0)
-	{
-		fs.open(process.log_name, "a+", function(err, fd)
-		{	
-			var strLog = "";
-			var rs = fs.createReadStream(null, {"fd":fd, "encoding":"utf8"})
-				.on("data", function(data){strLog += data;})
-				.on("end", function(){process.stdout.write(strLog);});
-		});
 	}
 });
 
