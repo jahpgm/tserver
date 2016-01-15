@@ -28,8 +28,8 @@ process.stdin.on("data", function(data)
 			answer = answer.toLowerCase();
 			if(answer == "y" || answer == "yes")
 				OpenLog(process.filename, false);
-			this.close();	
-			this.resume();
+			this.close(); //supposed to do the resume below...doesn't seem to.	
+			this.resume();//see above.
 		}.bind(rl));
 	}
 	else
