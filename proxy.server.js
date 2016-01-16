@@ -90,12 +90,18 @@ var server = http.createServer(function(request, response)
 		});
 		clientRequest.end();
 	}
-	else
+	else		
 	if(urlInfo.pathname.search("/nyxword.htm") == 0)
 	{
 		console.log(util.format("Proxy: UNDER CONSTRUCTION Reading File '%s'", request.url));
 		response.writeHead(200, "OK", {"content-type":"text/html"});
 		response.end("<html><body><h1>Serving Files...Under Construction</h1></body></html>");
+	}
+	else
+	if(urlInfo.pathname.search("/nancy") == 0)
+	{
+		response.writeHead(200, "OK", {"content-type":"text/html"});
+		response.end("<html><body><h1>Nancy...that shit aint available!</h1></body></html>");
 	}
 	else
 	{
