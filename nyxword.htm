@@ -121,8 +121,8 @@
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
 					{
-						case "proxy.jsp": strUri = "http://localhost:8080/ibi_apps/tools/jahtest/nyxword/proxy.jsp?" + strParm;break;
-						case "proxy.server.js": strUri = "http://localhost:8000/proxy?uri=" + strParm;break;
+						case "proxy.jsp": strUri = "./proxy.jsp?" + strParm;break;
+						case "proxy.server.js": strUri = "./proxy?uri=" + strParm;break;
 						case "none": strUri = strParm;
 					}
 

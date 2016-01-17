@@ -4,7 +4,7 @@ const url = require("url");
 const util = require("util");
 const readline = require("readline");
 const args = require("./args.js");
-
+ 
 console._log = console.log;
 console.log = function(strLog)
 {
@@ -90,24 +90,15 @@ var server = http.createServer(function(request, response)
 		});
 		clientRequest.end();
 	}
-	else		
-	if(urlInfo.pathname.search("/nyxword.htm") == 0)
-	{
-		console.log(util.format("Proxy: UNDER CONSTRUCTION Reading File '%s'", request.url));
-		response.writeHead(200, "OK", {"content-type":"text/html"});
-		response.end("<html><body><h1>Serving Files...Under Construction</h1></body></html>");
-	}
-	else
-	if(urlInfo.pathname.search("/nancy") == 0)
-	{
-		response.writeHead(200, "OK", {"content-type":"text/html"});
-		response.end("<html><body><h1>Nancy...that shit aint available!</h1></body></html>");
-	}
 	else
 	{
-		console.log(util.format("Proxy: 404 Not found - %s", request.url));
-		response.writeHead(404, "Not Found", {"content-type":"text/html", "access-control-allow-origin":"*"});
-		response.end(util.format("<!DOCTYPE html><html><body><h1>Status: 404</h1><h2>Resource not found: %s</h2></body</html>", request.url));
+		console.log(util.format("Requesting File: %s", request.url)); 
+		fs.readFile("./" + request.url, function(url, err, data)
+		{
+			console.log(util.format("Returning File: %s", url));
+			response.writeHead(200, "OK", {"content-type":"text/html"});
+			response.end(data);
+		}.bind(fs, request.url));
 	}
 }).listen(args.port, function()
 {
