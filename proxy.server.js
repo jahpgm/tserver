@@ -92,10 +92,10 @@ var server = http.createServer(function(request, response)
 	}
 	else
 	{
-		console.log(util.format("Requesting File: %s", request.url)); 
+		console.log(util.format("Proxy: Requesting File: %s", request.url)); 
 		fs.readFile("./" + request.url, function(url, err, data)
 		{
-			console.log(util.format("Returning File: %s", url));
+			console.log(util.format("Proxy: Returning File: %s", url));
 			response.writeHead(200, "OK", {"content-type":"text/html"});
 			response.end(data);
 		}.bind(fs, request.url));
