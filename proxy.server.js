@@ -1,5 +1,6 @@
 const http = require("http");
 const fs = require("fs");
+const path = require("path");
 const url = require("url");
 const util = require("util");
 const readline = require("readline");
@@ -50,22 +51,15 @@ function OpenLog(filename, bAppend)
 	process.log_fd = fs.openSync(process.log_name, bAppend ? "a+" : "w+");
 	process.log_stream = fs.createWriteStream(null, {"fd":process.log_fd});
 }
-OpenLog(args.logfile, true);
 
 var server = http.createServer(function(request, response)
 {
-	if(this._cr)
-	{
-		this._cr.abort();
-		this._cr = null;
-	}
-
 	var urlInfo = url.parse(request.url, true);
 	var query = urlInfo.query;
 	if((urlInfo.pathname.search("/proxy") == 0) && query.uri)
 	{
 		var info = url.parse(query.uri);
-		var clientRequest = this._cr = http.request(info, function(srvRequest, srvResponse, response)
+		var clientRequest = http.request(info, function(srvRequest, srvResponse, response)
 		{
 			srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
 			response.on("data", function(chunk)
@@ -84,21 +78,31 @@ var server = http.createServer(function(request, response)
 		});
 		clientRequest.on("error", function(error)
 		{
-			console.log(util.format("Proxy: Error '%s' from '%s'", error.code, request.url));
 			response.writeHead(500, "Internal Server Error", {"content-type":"text/html", "access-control-allow-origin":"*"});
 			response.end(util.format("<!DOCTYPE html><html><body><h1>Status: 500</h1><h2>Internal Server Error: %s</h2></body</html>", error.toString()));
+			console.log(util.format("Proxy: Error '%s' from '%s'", error.code, request.url));
 		});
 		clientRequest.end();
 	}
 	else
 	{
+		console.dir(path.parse(urlInfo.pathname));
 		console.log(util.format("Proxy: Requesting File: %s", request.url)); 
-		fs.readFile("./" + request.url, function(url, err, data)
+		fs.readFile("./" + urlInfo.pathname, function(url, err, data)
 		{
-			console.log(util.format("Proxy: Returning File: %s", url));
-			response.writeHead(200, "OK", {"content-type":"text/html"});
-			response.end(data);
-		}.bind(fs, request.url));
+			if(err)
+			{
+				response.writeHead(404, "File not found", {"content-type":"text/html"});
+				response.end(util.format("<html><body>404 File not found: %s</body></html>", url));
+				console.log("Proxy: " + err);
+			}
+			else
+			{
+				response.writeHead(200, "OK", {"content-type":"text/html"});
+				response.end(data);
+				console.log(util.format("Proxy: Returning File: %s", url));
+			}
+		}.bind(fs, urlInfo.pathname));
 	}
 }).listen(args.port, function()
 {

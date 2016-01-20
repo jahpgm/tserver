@@ -111,9 +111,10 @@
 					return _args[n];
 				});
 			};
+
+			var curAjax = null;
 			$(function()
 			{
-				var curAjax = null;
 				function LoadPuzzle(date)
 				{
 					var date = date || $("#puzzDate").datepicker("getDate");
