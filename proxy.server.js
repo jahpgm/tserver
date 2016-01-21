@@ -109,7 +109,18 @@ var server = http.createServer(function(request, response)
 			}
 			else
 			{
-				response.writeHead(200, "OK", {"content-type":"text/html"});
+				var strType = "text/plain";
+				var fType = filename.substring(filename.lastIndexOf(".")).trim();
+				if(fType == ".htm" || fType == ".html")
+					strType = "text/html";
+				else
+				if(fType == ".js")
+					strType = "text/javascript";
+				else
+				if(fType == ".css")
+					strType = "text/css";
+
+				response.writeHead(200, "OK", {"content-type":strType});
 				response.end(data);
 				console.log(util.format("Proxy: Returning File: %s", url));
 			}
