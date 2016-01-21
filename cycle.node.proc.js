@@ -9,8 +9,7 @@ function CycleNodeProcess()
 	this._args = require("./args.js");
 	this._fsw = fs.watch(this._args.process, this.startProcess.bind(this));
 	console.log(util.format("Cycle: Listening to '%s'", this._args.process));
-	process.title = util.format("CycleNodeProcess - Process '%s'", this._args.process);
-
+	process.title = util.format("CycleNodeProcess - Process '%s'", this._args);
 	this.startProcess(this._args.arArgs);
 }
 util.inherits(CycleNodeProcess, EventEmitter);
@@ -23,7 +22,7 @@ _p.startProcess = function(args, event, filename)
 		this._cp.kill();
 
 	console.log(util.format("Cycle: Starting '%s'", this._args.process));
-	this._cp = proc.fork(this._args.process, this._args.arArgs);
+	this._cp = proc.fork(this._args.process, process.argv.slice(2));
 	this._cp.on("exit", function(cp, code, signal)
 	{
 		console.log(util.format("Cycle: Killed '%s'", this._args.process));

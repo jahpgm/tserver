@@ -5,7 +5,7 @@ const url = require("url");
 const util = require("util");
 const readline = require("readline");
 const args = require("./args.js");
- 
+
 console._log = console.log;
 console.log = function(strLog)
 {
@@ -31,6 +31,7 @@ process.stdin.on("data", function(data)
 				.on("end", function(){process.stdout.write(strLog);});
 		});
 	}
+	else
 	if(strData.search("clog") == 0)
 	{
 		var rl = readline.createInterface({input:process.stdin, output:process.stdout});
@@ -43,6 +44,9 @@ process.stdin.on("data", function(data)
 			this.resume();//see above.
 		}.bind(rl));
 	}
+	else
+	if(strData.search("webroot") == 0)
+		setWebRoot(strData.replace(/webroot\s*/g, "").trim());
 });
 
 function OpenLog(filename, bAppend)
@@ -52,12 +56,19 @@ function OpenLog(filename, bAppend)
 	process.log_stream = fs.createWriteStream(null, {"fd":process.log_fd});
 }
 
+function setWebRoot(rootPath)
+{
+	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : util.format("%s\\%s", path.parse(require.main.filename).dir, rootPath));
+	process.chdir(rootPath);
+}
+setWebRoot(args.webroot);
+
 var server = http.createServer(function(request, response)
 {
 	var urlInfo = url.parse(request.url, true);
 	var query = urlInfo.query;
-	var filepath = util.format("%s\\%s%s", process.cwd(), args.webroot, urlInfo.pathname).replace(/\//g, "");
-	if((filepath.search("\nyxword\proxy") == 0) && query.uri)
+
+	if((urlInfo.pathname.search("/nyxword/proxy") == 0) && query.uri)
 	{
 		var info = url.parse(query.uri);
 		var clientRequest = http.request(info, function(srvRequest, srvResponse, response)
@@ -87,21 +98,20 @@ var server = http.createServer(function(request, response)
 	}
 	else
 	{
-		var filepath = util.format("%s\\%s%s", process.cwd(), args.webroot, urlInfo.pathname).replace(/\//g, "\\");
-		console.log(util.format("Proxy: Requesting File: %s", filepath)); 
-		fs.readFile(filepath, function(url, err, data)
+		var filename = path.normalize(process.cwd() + urlInfo.pathname);
+		fs.readFile(filename, function(url, err, data)
 		{
 			if(err)
 			{
 				response.writeHead(404, "File not found", {"content-type":"text/html"});
-				response.end(util.format("<html><body>404 File not found: %s</body></html>", filepath));
+				response.end(util.format("<html><body>404 File not found: %s</body></html>", url));
 				console.log("Proxy: " + err);
 			}
 			else
 			{
 				response.writeHead(200, "OK", {"content-type":"text/html"});
 				response.end(data);
-				console.log(util.format("Proxy: Returning File: %s", filepath));
+				console.log(util.format("Proxy: Returning File: %s", url));
 			}
 		}.bind(fs, urlInfo.pathname));
 	}
