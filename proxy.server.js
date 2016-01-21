@@ -56,7 +56,8 @@ var server = http.createServer(function(request, response)
 {
 	var urlInfo = url.parse(request.url, true);
 	var query = urlInfo.query;
-	if((urlInfo.pathname.search("/proxy") == 0) && query.uri)
+	var filepath = util.format("%s\\%s%s", process.cwd(), args.webroot, urlInfo.pathname).replace(/\//g, "");
+	if((filepath.search("\nyxword\proxy") == 0) && query.uri)
 	{
 		var info = url.parse(query.uri);
 		var clientRequest = http.request(info, function(srvRequest, srvResponse, response)
@@ -86,21 +87,21 @@ var server = http.createServer(function(request, response)
 	}
 	else
 	{
-		console.dir(path.parse(urlInfo.pathname));
-		console.log(util.format("Proxy: Requesting File: %s", request.url)); 
-		fs.readFile("./" + urlInfo.pathname, function(url, err, data)
+		var filepath = util.format("%s\\%s%s", process.cwd(), args.webroot, urlInfo.pathname).replace(/\//g, "\\");
+		console.log(util.format("Proxy: Requesting File: %s", filepath)); 
+		fs.readFile(filepath, function(url, err, data)
 		{
 			if(err)
 			{
 				response.writeHead(404, "File not found", {"content-type":"text/html"});
-				response.end(util.format("<html><body>404 File not found: %s</body></html>", url));
+				response.end(util.format("<html><body>404 File not found: %s</body></html>", filepath));
 				console.log("Proxy: " + err);
 			}
 			else
 			{
 				response.writeHead(200, "OK", {"content-type":"text/html"});
 				response.end(data);
-				console.log(util.format("Proxy: Returning File: %s", url));
+				console.log(util.format("Proxy: Returning File: %s", filepath));
 			}
 		}.bind(fs, urlInfo.pathname));
 	}
