@@ -1,8 +1,2 @@
-14:38:58 1/22/2016 Server: logging to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\nyxword\test.server.log.txt
-14:39:10 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
-14:39:10 1/22/2016 Server: Returning File: /widget_box/widget_box.css
-14:39:10 1/22/2016 Server: Returning File: /widget_box/widget_box.js
-14:39:11 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
-14:39:11 1/22/2016 Server: Returning File: /nyxword/loader.gif
-14:39:13 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
-14:39:13 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+14:45:1 1/22/2016 Server: logging to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\nyxword\test.server.log.txt
+14:45:1 1/22/2016 Server: webroot 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest'
