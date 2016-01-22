@@ -7,10 +7,13 @@ const readline = require("readline");
 const args = require("./args.js");
 
 console._log = console.log;
-console.log = function(strLog)
+console.log = function(strLog, bNoLog)
 {
-	var date = new Date();
-	(process.log_stream && process.log_stream.write(util.format("%s:%s:%s %s/%s/%s %s\r\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
+	if(!bNoLog)
+	{
+		var date = new Date();
+		(process.log_stream && process.log_stream.write(util.format("%s:%s:%s %s/%s/%s %s\r\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
+	}
 	console._log.call(console, strLog);
 };
 console.reset = function(){process.stdout.write("\33c");};
@@ -22,7 +25,10 @@ process.stdin.on("data", function(data)
 		console.reset();
 	else
 	if(strData.search("log") == 0)
+	{
+		console.log(util.format("========== %s ==========", path.parse(process.log_name).name), true);
 		fs.createReadStream(process.log_name).pipe(process.stdout);
+	}
 	else
 	if(strData.search("clog") == 0)
 	{
@@ -127,8 +133,8 @@ var server = http.createServer(function(request, response)
 	}
 }).listen(args.port, function()
 {
-	process.title = util.format("Server: listening on %s", args.port);
-	console.log(util.format("Server: listening on %s", args.port))
 	OpenLog(null, true);
 	setWebRoot(args.webroot);
+	console.log(util.format("Server: ***** Listening on port %s *****", args.port))
+	process.title = util.format("Server: listening on port %s", args.port);
 });
