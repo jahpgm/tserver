@@ -7,7 +7,7 @@ function CycleNodeProcess()
 {
 	EventEmitter.call(this);
 	this._args = require("./args.js");
-	this._fsw = fs.watch(this._args.process, this.startProcess.bind(this));
+	this._fsw = fs.watchFile(this._args.process, {interval: 250}, this.startProcess.bind(this));
 	console.log(util.format("Cycle: Listening to '%s'", this._args.process));
 	process.title = util.format("CycleNodeProcess - Process '%s'", this._args);
 	this.startProcess(this._args.arArgs);
@@ -16,18 +16,28 @@ util.inherits(CycleNodeProcess, EventEmitter);
 var _p = CycleNodeProcess.prototype;
 
 _p._cp = null;
-_p.startProcess = function(args, event, filename)
+_p.startProcess = function(curr, prev)
 {
-	if(this._cp)
-		this._cp.kill();
-
-	console.log(util.format("Cycle: Starting '%s'", this._args.process));
-	this._cp = proc.fork(this._args.process, process.argv.slice(2));
-	this._cp.on("exit", function(cp, code, signal)
+	if(this._restarting || (curr && prev) && (curr.mtime != prev.mtime))
 	{
-		console.log(util.format("Cycle: Killed '%s'", this._args.process));
-	}.bind(this, this._cp));
-	return this._cp
+		if(this._cp)
+		{
+			this._cp.kill();
+			this._cp = null;
+		}
+		else
+		{
+			console.log(util.format("Cycle: Start '%s'", this._args.process));
+			this._cp = proc.fork(this._args.process, process.argv.slice(2));
+			this._cp.on("close", function(code, signal)
+			{
+				console.log(util.format("Cycle: Stop '%s'", this._args.process));
+				this._restarting = true;
+				this.startProcess();
+				this._restarting = false;
+			}.bind(this));
+		}
+	}
 }
 var cProcess = new CycleNodeProcess();
 
