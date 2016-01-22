@@ -22,15 +22,7 @@ process.stdin.on("data", function(data)
 		console.reset();
 	else
 	if(strData.search("log") == 0)
-	{
-		var strLog = "";
-		//rs = fs.createReadStream(process.log_name).pipe(process.stdout);
-		/*
-		var rs = fs.createReadStream(null, {"fd":fd, "encoding":"utf8"})
-			.on("data", function(data){strLog += data;})
-			.on("end", function(){process.stdout.write(strLog);});
-		*/
-	}
+		fs.createReadStream(process.log_name).pipe(process.stdout);
 	else
 	if(strData.search("clog") == 0)
 	{
@@ -55,9 +47,10 @@ process.stdin.on("data", function(data)
 	}
 });
 
-function OpenLog(filename, bAppend)
+function OpenLog(logPath, bAppend)
 {
-	process.log_name = filename || "test.server.log.txt";
+	logPath = logPath || "./test.server.log.txt";
+	process.log_name = path.normalize(path.isAbsolute(logPath) ? logPath : util.format("%s\\%s", path.parse(require.main.filename).dir, logPath));
 	process.log_stream = fs.createWriteStream(process.log_name, {flags: bAppend ? "a+" : "w+"});
 	console.log("Server: logging to " + process.log_name);
 }
