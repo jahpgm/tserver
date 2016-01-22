@@ -1,2 +1,0 @@
-14:45:1 1/22/2016 Server: logging to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\nyxword\test.server.log.txt
-14:45:1 1/22/2016 Server: webroot 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest'
