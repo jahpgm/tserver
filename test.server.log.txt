@@ -1,0 +1,165 @@
+9:43:5 1/22/2016 Server: Started and listening on 8000
+9:43:12 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:12 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:12 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:13 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:13 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:14 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:14 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:14 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:14 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:14 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:14 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:14 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:14 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:14 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:14 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:15 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:15 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:15 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:43:15 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:43:15 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:43:15 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:15 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:43:16 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:16 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:16 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:16 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:20 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:43:52 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:44:6 1/22/2016 Server: Started and listening on 8000
+9:44:11 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:44:11 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:44:11 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:44:11 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:44:11 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:44:15 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:44:15 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:44:15 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:44:16 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:44:16 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:44:16 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:44:16 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:44:16 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:44:17 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:44:17 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:44:18 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:44:18 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:44:18 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:44:18 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:44:18 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:45:23 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:45:23 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:45:23 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:45:23 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:45:23 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:45:55 1/22/2016 Server: Started and listening on 8000
+9:45:55 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:45:56 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+9:46:5 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+9:46:5 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+9:46:5 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+9:46:5 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+9:46:5 1/22/2016 Server: Returning File: /nyxword/loader.gif
+9:46:6 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+9:46:10 1/22/2016 Server: Started and listening on 8000
+9:46:17 1/22/2016 Server: Started and listening on 8000
+10:5:26 1/22/2016 Server: Started and listening on 8000
+10:5:30 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+10:5:30 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+10:5:30 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+10:5:31 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:31 1/22/2016 Server: Returning File: /nyxword/loader.gif
+10:5:31 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:31 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+10:5:31 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+10:5:33 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+10:5:33 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+10:5:33 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+10:5:33 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:33 1/22/2016 Server: Returning File: /nyxword/loader.gif
+10:5:33 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:33 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+10:5:44 1/22/2016 Server: Returning File: /nyxword/nyxword.htm
+10:5:44 1/22/2016 Server: Returning File: /widget_box/widget_box.css
+10:5:44 1/22/2016 Server: Returning File: /widget_box/widget_box.js
+10:5:44 1/22/2016 Server: Connecting to '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:44 1/22/2016 Server: Returning File: /nyxword/loader.gif
+10:5:45 1/22/2016 Server: Finished loading '/nyxword/proxy?uri=http://www.xwordinfo.com/Crossword?date=01/22/2016'
+10:5:45 1/22/2016 Server: Error: ENOENT: no such file or directory, open 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest\images\cons\PaulaGamache.jpg'
+10:5:54 1/22/2016 LOGGING FILE
+10:6:44 1/22/2016 Server: Started and listening on 8000
+10:7:1 1/22/2016 Server: Started and listening on 8000
+10:7:11 1/22/2016 Server: Started and listening on 8000
+10:7:51 1/22/2016 Server: Started and listening on 8000
+10:8:7 1/22/2016 Server: Started and listening on 8000
+10:9:2 1/22/2016 Server: Started and listening on 8000
+10:11:16 1/22/2016 webroot: C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:11:16 1/22/2016 Server: Started and listening on 8000
+10:11:21 1/22/2016 C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:11:46 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:11:46 1/22/2016 Server: Started and listening on 8000
+10:11:55 1/22/2016 Server: webroot set toC:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:11:55 1/22/2016 Server: Started and listening on 8000
+10:11:59 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:11:59 1/22/2016 Server: Started and listening on 8000
+10:12:2 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:12:3 1/22/2016 Server: Started and listening on 8000
+10:12:30 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:12:34 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:13:24 1/22/2016 Server: logfile set to test.server.log.txt
+10:13:24 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:13:46 1/22/2016 Server: logging totest.server.log.txt
+10:13:46 1/22/2016 Server: webroot set to C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:13:53 1/22/2016 Server: logging totest.server.log.txt
+10:13:53 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:14:1 1/22/2016 Server: logging to test.server.log.txt
+10:14:1 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:14:50 1/22/2016 Server: logging to test.server.log.txt
+10:14:50 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:14:58 1/22/2016 Server: logging to test.server.log.txt
+10:14:58 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:8 1/22/2016 Server: logging to test.server.log.txt
+10:15:8 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:37 1/22/2016 Server: logging to test.server.log.txt
+10:15:37 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:43 1/22/2016 Server: logging to test.server.log.txt
+10:15:43 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:49 1/22/2016 Server: logging to test.server.log.txt
+10:15:49 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:55 1/22/2016 Server: logging to test.server.log.txt
+10:15:55 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:15:59 1/22/2016 Server: logging to test.server.log.txt
+10:15:59 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:16:3 1/22/2016 Server: logging to test.server.log.txt
+10:16:3 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:17:9 1/22/2016 Server: logging to test.server.log.txt
+10:17:9 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:17:22 1/22/2016 Server: logging to test.server.log.txt
+10:17:22 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:17:32 1/22/2016 Server: logging to test.server.log.txt
+10:17:32 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:17:37 1/22/2016 Server: logging to test.server.log.txt
+10:17:37 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:18:2 1/22/2016 Server: logging to test.server.log.txt
+10:18:2 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:18:11 1/22/2016 Server: logging to test.server.log.txt
+10:18:11 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+10:18:15 1/22/2016 Server: logging to test.server.log.txt
+10:18:15 1/22/2016 Server: webroot = C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest
+11:34:41 1/22/2016 Server: logging to test.server.log.txt
+11:34:41 1/22/2016 Server: webroot 'C:\ibi\WebFOCUS82\webapps\webfocus\tools\jahtest'
