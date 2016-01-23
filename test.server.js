@@ -6,41 +6,91 @@ const util = require("util");
 const readline = require("readline");
 const args = require("./args.js");
 
-console._log = console.log;
-console.log = function(strLog, bNoLog)
+function TestServer(webroot, port)
 {
-	if(!bNoLog)
+	http.Server.call(this);
+	process.stdin.on("data", this._handleInput.bind(this));
+
+	this.on("request", this._onRequest.bind(this));
+	this._openLog(args.log_file, true);
+	this.listen(port, this._onListening.bind(this));
+	this.setWebRoot(webroot);
+}
+util.inherits(TestServer, http.Server);
+var _p = TestServer.prototype;
+
+TestServer.CONTENT_TYPES =
+{
+	".txt":"text/plain",
+	".htm":"text/html",
+	".html":"text/html",
+	".js":"text/javascript",
+	".css":"text/css",
+	".png":"image/png",
+	".jpeg":"image/jpeg",
+	".gif":"image/gif"
+};
+TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[filePath.substring(filePath.lastIndexOf(".")).trim()] || TestServer.CONTENT_TYPES[".txt"]);};
+
+_p._onListening = function()
+{
+	this.log(util.format("Server: ***** Listening on port %s *****", args.port))
+	process.title = util.format("Server: listening on port %s", args.port);
+};
+
+_p.setWebRoot = function(rootPath)
+{
+	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : util.format("%s\\%s", path.parse(require.main.filename).dir, rootPath));
+	process.chdir(rootPath);
+	this.log(util.format("Server: webroot '%s'", rootPath));
+};
+
+_p._logName = "";
+_p._logStream = null;
+_p._openLog = function(logPath, bAppend)
+{
+	logPath = logPath || "./test.server.log.txt";
+	this._logName = path.normalize(path.isAbsolute(logPath) ? logPath : util.format("%s\\%s", path.parse(require.main.filename).dir, logPath));
+	this._logStream = fs.createWriteStream(this._logName, {flags: bAppend ? "a+" : "w+"});
+	this.log("Server: logging to " + this._logName);
+};
+
+_p.log = function(strLog, bNoWrite)
+{
+	if(!bNoWrite)
 	{
 		var date = new Date();
-		(process.log_stream && process.log_stream.write(util.format("%s:%s:%s %s/%s/%s %s\r\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
+		(this._logStream && this._logStream.write(util.format("%s:%s:%s %s/%s/%s %s\r\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
 	}
-	console._log.call(console, strLog);
+	console.log(strLog);
 };
-console.reset = function(){process.stdout.write("\33c");};
+_p.logReset = function(){process.stdout.write("\33c");};
 
-process.stdin.on("data", function(data)
+_p._handleInput = function(data)
 {
 	var strData = data.toString().toLowerCase();
 	if(strData.search("cls") == 0)
-		console.reset();
+		this.logReset();
 	else
 	if(strData.search("log") == 0)
 	{
-		console.log(util.format("========== %s ==========", path.parse(process.log_name).name), true);
-		fs.createReadStream(process.log_name).pipe(process.stdout);
+		this.log(util.format("========== START %s ==========", path.parse(this._logName).name), true);
+		fs.createReadStream(this._logName).pipe(process.stdout);
 	}
 	else
 	if(strData.search("clog") == 0)
 	{
+		var self = this;
 		var rl = readline.createInterface({input:process.stdin, output:process.stdout});
+		rl._classname = "readline";
 		rl.question("Are you sure you want to clear the log file (Y/N)?", function(answer)
 		{
 			answer = answer.toLowerCase();
 			if(answer == "y" || answer == "yes")
-				OpenLog(process.filename, false);
-			this.close(); //supposed to do the resume below...doesn't seem to.	
-			this.resume();//see above.
-		}.bind(rl));
+				this._openLog(process.filename, false);
+			rl.close(); //supposed to do the resume below...doesn't seem to.	
+			rl.resume();//see above.
+		}.bind(this));
 	}
 	else
 	if(strData.search("webroot") == 0)
@@ -49,92 +99,66 @@ process.stdin.on("data", function(data)
 		if(webRoot)
 			setWebRoot(webRoot);
 		else
-			console.log(process.cwd());
+			this.log(process.cwd());
 	}
-});
+};
 
-function OpenLog(logPath, bAppend)
-{
-	logPath = logPath || "./test.server.log.txt";
-	process.log_name = path.normalize(path.isAbsolute(logPath) ? logPath : util.format("%s\\%s", path.parse(require.main.filename).dir, logPath));
-	process.log_stream = fs.createWriteStream(process.log_name, {flags: bAppend ? "a+" : "w+"});
-	console.log("Server: logging to " + process.log_name);
-}
-
-function setWebRoot(rootPath)
-{
-	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : util.format("%s\\%s", path.parse(require.main.filename).dir, rootPath));
-	process.chdir(rootPath);
-	console.log(util.format("Server: webroot '%s'", rootPath));
-}
-
-var server = http.createServer(function(request, response)
+_p._onRequest = function(request, response)
 {
 	var urlInfo = url.parse(request.url, true);
 	var query = urlInfo.query;
 
-	if((urlInfo.pathname.search("/nyxword/proxy") == 0) && query.uri)
-	{
-		var info = url.parse(query.uri);
-		var clientRequest = http.request(info, function(srvRequest, srvResponse, response)
-		{
-			srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
-			response.on("data", function(chunk)
-			{
-				srvResponse.write(chunk);
-			});
-			response.on("end", function()
-			{
-				srvResponse.end();
-				console.log(util.format("Server: Finished loading '%s'", srvRequest.url));
-			});
-		}.bind(clientRequest, request, response));
-		clientRequest.on("socket", function(response, socket, head)
-		{
-			console.log(util.format("Server: Connecting to '%s'", request.url));
-		});
-		clientRequest.on("error", function(error)
-		{
-			response.writeHead(500, "Internal Server Error", {"content-type":"text/html", "access-control-allow-origin":"*"});
-			response.end(util.format("<!DOCTYPE html><html><body><h1>Status: 500</h1><h2>Internal Server Error: %s</h2></body</html>", error.toString()));
-			console.log(util.format("Server: Error '%s' from '%s'", error.code, request.url));
-		});
-		clientRequest.end();
-	}
+	if((urlInfo.pathname.search("/proxy/load") == 0) && query.uri)
+		this.loadProxy(query.uri, request, response);
 	else
-	{
-		var filename = path.normalize(process.cwd() + urlInfo.pathname);
-		fs.readFile(filename, function(url, err, data)
-		{
-			if(err)
-			{
-				response.writeHead(404, "File not found", {"content-type":"text/html"});
-				response.end(util.format("<html><body>404 File not found: %s</body></html>", url));
-				console.log("Server: " + err);
-			}
-			else
-			{
-				var strType = "text/plain";
-				var fType = filename.substring(filename.lastIndexOf(".")).trim();
-				if(fType == ".htm" || fType == ".html")
-					strType = "text/html";
-				else
-				if(fType == ".js")
-					strType = "text/javascript";
-				else
-				if(fType == ".css")
-					strType = "text/css";
+		this.loadPage(urlInfo.pathname, request, response);
+};
 
-				response.writeHead(200, "OK", {"content-type":strType});
-				response.end(data);
-				console.log(util.format("Server: Returning File: %s", url));
-			}
-		}.bind(fs, urlInfo.pathname));
-	}
-}).listen(args.port, function()
+_p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 {
-	OpenLog(null, true);
-	setWebRoot(args.webroot);
-	console.log(util.format("Server: ***** Listening on port %s *****", args.port))
-	process.title = util.format("Server: listening on port %s", args.port);
-});
+	var self = this;
+	var proxyInfo = url.parse(proxyUrl);
+	var clientRequest = http.request(proxyInfo, function(response)
+	{
+		srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
+		response.on("data", function(chunk)
+		{
+			srvResponse.write(chunk);
+		});
+		response.on("end", function()
+		{
+			srvResponse.end();
+			self.log(util.format("Server: Returning Proxy '%s'", srvRequest.url));
+		});
+	});
+	clientRequest.on("error", function(error)
+	{
+		srvResponse.writeHead(500, "Internal Server Error", {"content-type":"text/html", "access-control-allow-origin":"*"});
+		srvResponse.end(util.format("<!DOCTYPE html><html><body><h1>Status: 500</h1><h2>Internal Server Error: %s</h2></body</html>", error.toString()));
+		self.log(util.format("Server: Error '%s' from '%s'", error.code, proxyUrl));
+	});
+	clientRequest.end();
+};
+
+_p.loadPage = function(srvPath, srvRequest, srvResponse)
+{
+	var filePath = path.normalize(process.cwd() + srvPath);
+	this.log("Server: Requesting File: " + srvPath);
+	fs.readFile(filePath, function(srvPath, srvRequest, srvResponse, err, data)
+	{
+		if(err)
+		{
+			srvResponse.writeHead(404, "File not found", {"content-type":"text/html"});
+			srvResponse.end(util.format("<html><body>404 File not found: %s</body></html>", srvPath));
+			this.log("Server: " + err);
+		}
+		else
+		{
+			srvResponse.writeHead(200, "OK", {"content-type":TestServer.getContentType(srvPath)});
+			srvResponse.end(data);
+			this.log(util.format("Server: Returning File: %s", filePath));
+		}
+	}.bind(this, srvPath, srvRequest, srvResponse));
+}; 
+
+var ts = new TestServer(args.webroot, args.port);
