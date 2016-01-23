@@ -161,4 +161,5 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	}.bind(this, srvPath, srvRequest, srvResponse));
 }; 
 
+//Create the instance of the TestServer.
 var ts = new TestServer(args.webroot, args.port);
