@@ -40,7 +40,8 @@ _p._onListening = function()
 
 _p.setWebRoot = function(rootPath)
 {
-	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : util.format("%s\\%s", path.parse(require.main.filename).dir, rootPath));
+	//The previous way of resolving the root path didn't work on UNIX...had to change to path.resolve.
+	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath));
 	process.chdir(rootPath);
 	this.log(util.format("Server: webroot '%s'", rootPath));
 };
@@ -49,7 +50,7 @@ _p._logName = "";
 _p._logStream = null;
 _p._openLog = function(logPath, bAppend)
 {
-	logPath = logPath || "./test.server.log.txt";
+	logPath = logPath || ".\\test.server.log.txt";
 	this._logName = path.normalize(path.isAbsolute(logPath) ? logPath : util.format("%s\\%s", path.parse(require.main.filename).dir, logPath));
 	this._logStream = fs.createWriteStream(this._logName, {flags: bAppend ? "a+" : "w+"});
 	this.log("Server: logging to " + this._logName);
