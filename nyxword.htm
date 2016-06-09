@@ -22,9 +22,10 @@
 			.PuzTable td {vertical-align:top;height:14px;width:14px;border:1px solid black;padding:0px;}
 			.PuzTitle, .CPHContent_Copyright{font-family:Arial;font-weight:normal;font-size:8pt;}
 
-			body
+			.puzzle-diagramless
 			{
-				margin-left:.25in;
+				color:transparent;
+				background-color:transparent;
 			}
 
 			.dlg-pzl-sel
@@ -40,8 +41,7 @@
 				background-color:white;
 				border:1px solid black;
 				box-shadow: 5px 5px 5px gray;
-				margin-top:.25in;
-				margin-bottom:.25in;
+				margin-bottom:10px;
 				padding:4px;
 			}
 			.dlg-pzl-sel > * {margin:2px;}
@@ -99,7 +99,7 @@
 			}
 			.puzzle-page-container-landscape > .puzzle-container
 			{
-				margin-right:.5in;
+				margin-right:.25in;
 			}
 			.puzzle-clues
 			{
@@ -231,8 +231,7 @@
 
 				$(".make-diagramless").on("change", function(e)
 				{
-					$(".vblack").css("backgroundColor", (this.checked) ? "white" : "black");
-					var idx = $(".num").css("color", (this.checked) ? "white" : "black").index();
+					$("td.black, td.bigshade, .num").toggleClass("puzzle-diagramless");
 				});
 				
 				$(".show-answers").on("change", function(e)
