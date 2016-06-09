@@ -42,41 +42,36 @@
 				box-shadow: 5px 5px 5px gray;
 				margin-top:.25in;
 				margin-bottom:.25in;
+				padding:4px;
 			}
-			@media print{.dlg-pzl-sel{display: none;}}
+			.dlg-pzl-sel > * {margin:2px;}
+
 			.date-opts
 			{
 				flex:1 1 auto;
 				display:flex;
 				align-items:center;
 			}
-			.date-label, .date-sel, .date-print
-			{
-				flex:1 1 1px;
-				min-width:1px;
-			}
+			.date-label {width: 80px;}
+			.date-sel{flex:1 1 1px;min-width:1px;margin-right:4px;}
+
 			.proxy-opts
 			{
 				flex:1 1 auto;
 				display:flex;
 				align-items:center;
 			}
-			.proxy-label, .proxy-sel
-			{
-				flex:1 1 1px;
-				min-width:1px;
-			}
+			.proxy-label{width: 80px;}
+			.proxy-sel{flex:1 1 1px;}
+
 			.more-opts
 			{
 				flex:1 1 auto;
 				display:flex;
 				align-items:center;
 			}
-			.grid-size-label, .grid-size, .show-answers, .show-answers-label, .make-diagramless, .make-diagramless-label
-			{
-				flex: 1 1 1px;
-				min-width:1px;
-			}
+			.grid-size-label{width:80px}
+
 			.yet-more-opts
 			{
 				flex:1 1 auto;
@@ -84,6 +79,7 @@
 				justify:flex-end;
 				align-items:center;
 			}
+			.layout-landscape{margin-left:80px}
 
 			.puzzle-page-container
 			{
@@ -128,6 +124,22 @@
 				font-size:9pt;
 				font-weight:bold;
 				margin-bottom:3px;
+			}
+
+
+			@media print
+			{
+				.dlg-pzl-sel
+				{
+					display: none;
+				}
+			}
+			@media print and (orientation: landscape)
+			{
+				.puzzle-page-container
+				{
+					flex-direction:row;
+				}
 			}
 		</style>
 
@@ -233,14 +245,7 @@
 					if(e.ctrlKey)
 						LoadPuzzle();
 					else
-					{
-						var puzzContainer = $(".puzzle-page-container");
-						if($("#btnCluesOnRight").prop("checked"))
-							puzzContainer.addClass("puzzle-page-container-landscape");
-						else
-							puzzContainer.removeClass("puzzle-page-container-landscape");
 						window.print();
-					}
 				});
 
 				$("#btnLandscape").on("click", function(e)
@@ -249,14 +254,12 @@
 					$(e.target).prop("checked") ? pageContainer.addClass("puzzle-page-container-landscape") : pageContainer.removeClass("puzzle-page-container-landscape");
 				});
 
-				var dlgPuzzSel = $(".dlg-pzl-sel").draggable();
 				var puzzGridSize = $(".grid-size").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
 				{
 					var gridSize = parseInt($(".grid-size").prop("value"), 10) + "px";
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
 					$(this).prop("value", gridSize);
 				});
-				var cluesOnRight = $("#btnLandscape").trigger("click")
 			});
 		</script>
 	</head>
