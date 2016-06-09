@@ -21,89 +21,119 @@
 			.PuzTable {margin-bottom:0px;border-collapse:collapse;}
 			.PuzTable td {vertical-align:top;height:14px;width:14px;border:1px solid black;padding:0px;}
 			.PuzTitle, .CPHContent_Copyright{font-family:Arial;font-weight:normal;font-size:8pt;}
-			.puzzle-selection
+
+			body
 			{
-				z-index:1000;
-				width:250px;
-				font-family:Arial;
-				font-size:9pt;
-				background-color:white;
-				border:1px solid black;
-				padding:5px;
-				margin-bottom:10px;
-				box-shadow: 5px 5px 5px gray;
-			}
-			.puzzle-selection *{vertical-align: middle;}
-			.puzzle-selection .date-picker{width: 105px;}
-			.puzzle-selection .ctrl-container{margin-top:5px;}
-			.puzzle-clues a{display:none;}
-			.puzzle-clues-across, .puzzle-clues-down
-			{
-				display:inline-block;
-				vertical-align:top;
-				margin-right:10px;
-				max-width:2.5in;
-				font-family:Arial;
-				font-size:8pt;
+				margin-left:.25in;
 			}
 
-			.puzzle-across-header, .puzzle-down-header
+			.dlg-pzl-sel
 			{
-				font-size:9pt;
-				font-weight:bold;
-			}
+				display:flex;
+				flex-direction:column;
+				align-items:stretch;
 
-			#dlgPuzzSel
-			{
 				z-index:1000;
 				width:300px;
 				font-family:Arial;
 				font-size:8pt;
 				background-color:white;
 				border:1px solid black;
-				padding:7px;
-				margin-bottom:10px;
 				box-shadow: 5px 5px 5px gray;
+				margin-top:.25in;
+				margin-bottom:.25in;
+			}
+			@media print{.dlg-pzl-sel{display: none;}}
+			.date-opts
+			{
+				flex:1 1 auto;
+				display:flex;
+				align-items:center;
+			}
+			.date-label, .date-sel, .date-print
+			{
+				flex:1 1 1px;
+				min-width:1px;
+			}
+			.proxy-opts
+			{
+				flex:1 1 auto;
+				display:flex;
+				align-items:center;
+			}
+			.proxy-label, .proxy-sel
+			{
+				flex:1 1 1px;
+				min-width:1px;
+			}
+			.more-opts
+			{
+				flex:1 1 auto;
+				display:flex;
+				align-items:center;
+			}
+			.grid-size-label, .grid-size, .show-answers, .show-answers-label, .make-diagramless, .make-diagramless-label
+			{
+				flex: 1 1 1px;
+				min-width:1px;
+			}
+			.yet-more-opts
+			{
+				flex:1 1 auto;
+				display:flex;
+				justify:flex-end;
+				align-items:center;
 			}
 
+			.puzzle-page-container
+			{
+				flex:1 1 auto;
+				display:flex;
+				flex-direction:column;
+				flex-wrap:nowrap;
+				align-items:start;
+			}
+			.puzzle-page-container-landscape
+			{
+				flex-direction:row;
+			}
 			.puzzle-container
 			{
-				margin-bottom:10px;
+				flex:0 0 auto;
 			}
-
-			@media print
+			.puzzle-page-container-landscape > .puzzle-container
 			{
-				#dlgPuzzSel{display: none;}
+				margin-right:.5in;
 			}
-			@media print and (orientation: portrait)
+			.puzzle-clues
 			{
+				flex:1 1 auto;
+				display:flex;
+				font-family:Arial;
+				font-size:8pt;
+				padding:3px;
 			}
-			@media print and (orientation: landscape)
+			.puzzle-clues-across, .puzzle-clues-down
 			{
-				.puzzle-page-container
-				{
-					margin-top: 24pt;
-				}
-
-				.puzzle-container
-				{
-					float:left;
-					margin-right:25px;
-				}
-				.puzzle-container-clues-left
-				{
-					float:right;
-					margin-left:25px;
-				}
+				flex:1 1 auto;
+				max-width:3in;
+				overflow:hidden;
+			}
+			.puzzle-clues-across
+			{
+				margin-right:.25in;
+			}
+			.puzzle-across-header, .puzzle-down-header
+			{
+				font-size:9pt;
+				font-weight:bold;
+				margin-bottom:3px;
 			}
 		</style>
 
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
-
-		<link rel="stylesheet" href="../widget_box/widget_box.css">
-		<script src="../widget_box/widget_box.js"></script>
 
 		<script type="text/javascript">
 			sprintf = function (sPattern, args) {
@@ -118,7 +148,7 @@
 			{
 				function LoadPuzzle(date)
 				{
-					var date = date || $("#puzzDate").datepicker("getDate");
+					var date = date || $(".date-sel").datepicker("getDate");
 					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
@@ -141,8 +171,8 @@
 						},
 						"success":function(puzzlePage, status, xhr)
 						{
-							puzzlePage = puzzlePage.replace(/ : <a/g, "<a");
-							console.log(puzzlePage);
+							puzzlePage = puzzlePage.replace(/ : /g, "");
+
 							var $puzzPage = $(puzzlePage);
 							var $puzzTab = $puzzPage.find("#PuzTable");
 							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
@@ -152,19 +182,20 @@
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
-							var $puzzClues = $(".puzzle-clues").css("display", "block").draggable();
 							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find("#CPHContent_AcrossClues"));
 							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find("#CPHContent_DownClues"));
 
-							$("#showAnswers").prop("checked", false);
-							$("#makeDiagramless").prop("checked", false);
-							$("#gridSize").trigger("change");
+							$(".show-answers").prop("checked", false);
+							$(".make-diagramless").prop("checked", false);
+							$(".grid-size").trigger("change");
 						
 							if(!$puzzTab.length)
 							{
 								var str = "DID YOU FORGET TO TURN OFF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
 								$(document.documentElement).html(str);
 							}
+
+							$(".puzzle-clues").css("display", "").find("a").remove(); //show puzzle, and remove answers now that it's all loaded.
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -173,10 +204,8 @@
 					});
 				}
 
-
-
 				var date = new Date();
-				$("#puzzDate").datepicker().datepicker("setDate", date).on("change", function(e)
+				$(".date-sel").datepicker().datepicker("setDate", date).on("change", function(e)
 				{
 					var date = $(e.target).datepicker("getDate");
 					LoadPuzzle(date);
@@ -188,89 +217,81 @@
 					LoadPuzzle(date);
 				});
 
-				$("#makeDiagramless").on("change", function(e)
+				$(".make-diagramless").on("change", function(e)
 				{
 					$(".vblack").css("backgroundColor", (this.checked) ? "white" : "black");
 					var idx = $(".num").css("color", (this.checked) ? "white" : "black").index();
 				});
 				
-				$("#showAnswers").on("change", function(e)
+				$(".show-answers").on("change", function(e)
 				{
 					$(".letter, .subst, .subst1").css("display", (this.checked) ? "inherit" : "none");
 				});
 
-				$("#btnPuzzPrint").on("click", function(e)
+				$(".date-print").on("click", function(e)
 				{
 					if(e.ctrlKey)
 						LoadPuzzle();
 					else
 					{
-						var puzzContainer = $(".puzzle-container");
+						var puzzContainer = $(".puzzle-page-container");
 						if($("#btnCluesOnRight").prop("checked"))
-							puzzContainer.removeClass("puzzle-container-clues-left");
+							puzzContainer.addClass("puzzle-page-container-landscape");
 						else
-							puzzContainer.addClass("puzzle-container-clues-left");
+							puzzContainer.removeClass("puzzle-page-container-landscape");
 						window.print();
 					}
 				});
 
-				var dlgPuzzSel = $("#dlgPuzzSel").draggable();
-				var proxyServerLabel = $("#proxyServerLabel").css({"min-width":"70px"});
-				var puzzDateLabel = $("#puzzDateLabel").css({"min-width":"70px"});
-				var boxProxyOptions = $("#boxProxyOptions").css("marginBottom", "7px");
-				var boxDateOptions = $("#boxDateOptions").css({"marginBottom":"7px", "border":"0px solid red"});
-				var proxyServer = $("#proxyServer");
-				var puzzDate = $("#puzzDate").css({"minWidth":"20px", "marginRight":"7px"});
-				var puzzPrint = $("#btnPuzzPrint");
-				var boxMoreOptions = $("#boxMoreOptions").css({"border":"0px solid green"});
-				var showAnswersLabel = $("#showAnswersLabel").css({"margin-right": "7px"});
-				var puzzGridSizeLabel = $("#gridSizeLabel").css({"min-width":"70px"});
-				var puzzGridSize = $("#gridSize").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
+				$("#btnLandscape").on("click", function(e)
 				{
-					var gridSize = parseInt($("#gridSize").prop("value"), 10) + "px";
+					var pageContainer = $(".puzzle-page-container");
+					$(e.target).prop("checked") ? pageContainer.addClass("puzzle-page-container-landscape") : pageContainer.removeClass("puzzle-page-container-landscape");
+				});
+
+				var dlgPuzzSel = $(".dlg-pzl-sel").draggable();
+				var puzzGridSize = $(".grid-size").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
+				{
+					var gridSize = parseInt($(".grid-size").prop("value"), 10) + "px";
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
 					$(this).prop("value", gridSize);
 				});
-				var cluesOnRight = $("#btnCluesOnRight").prop("checked", true);
+				var cluesOnRight = $("#btnLandscape").trigger("click")
 			});
 		</script>
 	</head>
 	<body>
-		<div class="puzzle-page-container">
-			<div id="dlgPuzzSel" data-role-flex="box" data-flex-direction="column" data-flex-justify="center" data-flex-align-items="stretch">
-				<div id="boxDateOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-align-items="center">
-					<label id="puzzDateLabel" for="puzzDate" data-role-flex="item">Puzzle Date:</label>
-					<input id="puzzDate" data-role-flex="item" data-flex-shrink="1" data-flex-grow="1" type="text" readonly="">
-					<button id="btnPuzzPrint" data-role-flex="item">Print...</button>
-				</div>
-				<div id="boxProxyOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-align-items="center">
-					<label id="proxyServerLabel" for="proxyServer" data-role-flex="item">Proxy Server:</label>
-					<select id="proxyServer" data-role-flex="item" data-flex-shrink="1" data-flex-grow="1">
-						<option value="proxy.jsp">Apache (proxy.jsp:8080)</option>
-						<option value="test.server.js" selected>Node.js (proxy.server.js:8000)</option>
-						<option value="none">None (Prolly won't work!)</option>
-					</select>
-				</div>
-				<div id="boxMoreOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-align-items="center">
-					<label id="gridSizeLabel" for="gridSize" data-role-flex="item">Grid Size:</label>
-					<input id="gridSize" data-role-flex="item" type="text">
-
-					<div data-role-flex="item" data-flex-grow="1"></div>
-
-					<input id="showAnswers" type="checkbox" data-role-flex="item"/>
-					<label id="showAnswersLabel" for="showAnswers" data-role-flex="item">Anwsers</label>
-					<input id="makeDiagramless" type="checkbox" data-role-flex="item"/>
-					<label for="makeDiagramless" data-role-flex="item">Diagramless</label>
-				</div>
-				<div id="boxYetMoreOptions" data-role-flex="box, item" data-flex-grow="1" data-flex-justify="end" data-flex-align-items="center">
-					<input id="btnCluesOnRight" type="checkbox" data-role-flex="item"/>
-					<label for="btnCluesOnRight" data-role-flex="item">Landscape Clues on Right</label>
-				</div>
+		<div class="dlg-pzl-sel">
+			<div class="date-opts">
+				<label class="date-label" for="puzzDate">Puzzle Date:</label>
+				<input class="date-sel" type="text" readonly="">
+				<button class="date-print">Print...</button>
 			</div>
+			<div class="proxy-opts">
+				<label class="proxy-label" for="proxyServer">Proxy Server:</label>
+				<select id="proxyServer" class="proxy-sel">
+					<option value="proxy.jsp">Apache (proxy.jsp:8080)</option>
+					<option value="test.server.js" selected>Node.js (proxy.server.js:8000)</option>
+					<option value="none">None (Prolly won't work!)</option>
+				</select>
+			</div>
+			<div class="more-opts">
+				<label class="grid-size-label" for="gridSize" data-role-flex="item">Grid Size:</label>
+				<input id="gridSize" class="grid-size" type="text">
+				<input id="showAnswers" class="show-answers" type="checkbox"/>
+				<label class="show-answers-label" for="showAnswers">Anwsers</label>
+				<input id="makeDiagramless" class="make-diagramless" type="checkbox"/>
+				<label for="makeDiagramless" class="make-diagramless-label">Diagramless</label>
+			</div>
+			<div class="yet-more-opts">
+				<input id="btnLandscape" class="layout-landscape" type="checkbox"/>
+				<label for="btnLandscape" class="layout-landscape-label">Landscape</label>
+			</div>
+		</div>
 
+		<div class="puzzle-page-container">
 			<div class="puzzle-container">
 			</div>
-
 			<div class="puzzle-clues">
 				<div class="puzzle-clues-across">
 					<div class="puzzle-across-header">Across</div>
