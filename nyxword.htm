@@ -68,18 +68,19 @@
 				align-items:center;
 			}
 			.grid-size-label{flex:0 0 80px;}
-			.grid-size{flex:1 1 1px;min-width:1px;text-align:center;}
-			.more-opts > input[type='checkbox']{margin-left:10px;}
+			.grid-size{flex:0 0 40px;min-width:1px;text-align:center;}
 
 			.yet-more-opts
 			{
 				flex:1 1 auto;
 				display:flex;
-				justify-content:flex-end;
+				flex-wrap:wrap;
+				justify-content:space-between;
 				align-items:center;
 			}
-			.layout-landscape{margin-left:80px}
-
+			.yet-more-opts > div{display:flex;align-items:center;}
+			.yet-more-opts > div > input[type='checkbox']{margin-left:10px;}
+			
 			.puzzle-page-container
 			{
 				flex:1 1 auto;
@@ -283,14 +284,21 @@
 			<div class="more-opts">
 				<label class="grid-size-label" for="gridSize" data-role-flex="item">Grid Size:</label>
 				<input id="gridSize" class="grid-size" type="text">
-				<input id="showAnswers" class="show-answers" type="checkbox"/>
-				<label class="show-answers-label" for="showAnswers">Show Anwsers</label>
-				<input id="makeDiagramless" class="make-diagramless" type="checkbox"/>
-				<label for="makeDiagramless" class="make-diagramless-label">Diagramless</label>
-			</div>
-			<div class="yet-more-opts">
-				<input id="btnLandscape" class="layout-landscape" type="checkbox"/>
-				<label for="btnLandscape" class="layout-landscape-label">Puzzle Layout Landscape</label>
+
+				<div class="yet-more-opts">
+					<div>
+						<input id="showAnswers" class="show-answers" type="checkbox"/>
+						<label class="show-answers-label" for="showAnswers">Show Anwsers</label>
+					</div>
+					<div>
+						<input id="makeDiagramless" class="make-diagramless" type="checkbox"/>
+						<label for="makeDiagramless" class="make-diagramless-label">Diagramless</label>
+					</div>
+					<div>
+						<input id="btnLandscape" class="layout-landscape" type="checkbox"/>
+						<label for="btnLandscape" class="layout-landscape-label">Puzzle Layout Landscape</label>
+					</div>
+				</div>
 			</div>
 		</div>
 
