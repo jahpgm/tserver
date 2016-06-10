@@ -99,7 +99,7 @@
 			}
 			.puzzle-page-container-landscape > .puzzle-container
 			{
-				margin-right:.25in;
+				margin-right:25px;
 			}
 			.puzzle-clues
 			{
@@ -126,7 +126,6 @@
 				margin-bottom:3px;
 			}
 
-
 			@media print
 			{
 				.dlg-pzl-sel
@@ -142,7 +141,7 @@
 				}
 				.puzzle-container
 				{
-					margin-right:.25in;
+					margin-right: 25px;
 				}
 			}
 		</style>
@@ -204,14 +203,13 @@
 							$(".show-answers").prop("checked", false);
 							$(".make-diagramless").prop("checked", false);
 							$(".grid-size").trigger("change");
-						
+							$(".puzzle-clues").css("display", "").find("a").remove(); //show puzzle, and remove answers now that it's all loaded.
+
 							if(!$puzzTab.length)
 							{
 								var str = "DID YOU FORGET TO TURN OFF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
 								$(document.documentElement).html(str);
 							}
-
-							$(".puzzle-clues").css("display", "").find("a").remove(); //show puzzle, and remove answers now that it's all loaded.
 						},
 						"error":function(xhr, strError, strMessage)
 						{
