@@ -2,10 +2,7 @@
 <html>
 	<head>
 		<title>New York Times Daily Crossword</title>
-		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
-		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="initial-scale=1">
 
 		<style type="text/css">
 			*{user-select:none;cursor: default;}
@@ -35,7 +32,7 @@
 				align-items:stretch;
 
 				z-index:1000;
-				width:300px;
+				width:325px;
 				font-family:Arial;
 				font-size:8pt;
 				background-color:white;
@@ -52,7 +49,7 @@
 				display:flex;
 				align-items:center;
 			}
-			.date-label {width: 80px;}
+			.date-label {flex:0 0 80px;}
 			.date-sel{flex:1 1 1px;min-width:1px;margin-right:4px;}
 
 			.proxy-opts
@@ -61,7 +58,7 @@
 				display:flex;
 				align-items:center;
 			}
-			.proxy-label{width: 80px;}
+			.proxy-label{flex:0 0 80px;}
 			.proxy-sel{flex:1 1 1px;}
 
 			.more-opts
@@ -70,13 +67,15 @@
 				display:flex;
 				align-items:center;
 			}
-			.grid-size-label{width:80px}
+			.grid-size-label{flex:0 0 80px;}
+			.grid-size{flex:1 1 1px;min-width:1px;text-align:center;}
+			.more-opts > input[type='checkbox']{margin-left:10px;}
 
 			.yet-more-opts
 			{
 				flex:1 1 auto;
 				display:flex;
-				justify:flex-end;
+				justify-content:flex-end;
 				align-items:center;
 			}
 			.layout-landscape{margin-left:80px}
@@ -139,6 +138,10 @@
 				.puzzle-page-container
 				{
 					flex-direction:row;
+				}
+				.puzzle-container
+				{
+					margin-right:.25in;
 				}
 			}
 		</style>
@@ -253,7 +256,7 @@
 					$(e.target).prop("checked") ? pageContainer.addClass("puzzle-page-container-landscape") : pageContainer.removeClass("puzzle-page-container-landscape");
 				});
 
-				var puzzGridSize = $(".grid-size").prop("value", "20px").css({"width":"40px", "text-align":"center"}).on("change", function(e)
+				var puzzGridSize = $(".grid-size").prop("value", "20px").on("change", function(e)
 				{
 					var gridSize = parseInt($(".grid-size").prop("value"), 10) + "px";
 					$(".PuzTable td").css({"width": gridSize, "height": gridSize});
@@ -281,13 +284,13 @@
 				<label class="grid-size-label" for="gridSize" data-role-flex="item">Grid Size:</label>
 				<input id="gridSize" class="grid-size" type="text">
 				<input id="showAnswers" class="show-answers" type="checkbox"/>
-				<label class="show-answers-label" for="showAnswers">Anwsers</label>
+				<label class="show-answers-label" for="showAnswers">Show Anwsers</label>
 				<input id="makeDiagramless" class="make-diagramless" type="checkbox"/>
 				<label for="makeDiagramless" class="make-diagramless-label">Diagramless</label>
 			</div>
 			<div class="yet-more-opts">
 				<input id="btnLandscape" class="layout-landscape" type="checkbox"/>
-				<label for="btnLandscape" class="layout-landscape-label">Landscape</label>
+				<label for="btnLandscape" class="layout-landscape-label">Puzzle Layout Landscape</label>
 			</div>
 		</div>
 
