@@ -210,6 +210,9 @@
 								var str = "DID YOU FORGET TO TURN OFF PK VALIDATION?!...<p><p><h1>SERVER RESPONSE:</h1><p>" + xhr.responseText;
 								$(document.documentElement).html(str);
 							}
+
+							var pCont = $(".puzzle-page-container");
+							pCont.data("puzzle", new XWord(pCont));
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -262,6 +265,43 @@
 					$(this).prop("value", gridSize);
 				});
 			});
+
+			/******************************************************************
+				Represents the interactive XWord Puzzle
+			******************************************************************/
+			function XWord(el)
+			{
+				var el = this.element = $(el);
+				el.find(".PuzTable td:not([class=black])").on("click", this._onCellClick.bind(this)).each(function(idx, el)
+				{
+					var cell = $(el);
+					var cellNum = parseInt(cell.children(".num").text());
+					if(!isNaN(cellNum))
+					{
+						cell.data("clueNum", cellNum);
+						console.log(cellNum);
+					}
+				}.bind(this));
+			
+				
+			};
+			var _p = XWord.prototype = new Object();
+
+			XWord.DEFINES = 
+			{
+				SEL_HORIZONTAL:0,
+				SEL_VERTICAL:1
+			};
+
+			_p._selDir = XWord.DEFINES.SEL_HORIZONTAL;
+			_p._onCellClick = function(e)
+			{
+				var cell = $(e.target);
+				var clueNum = cell.closest(":has(.num)").data("clueNum");
+				console.log(clueNum);
+				debugger;
+			}
+
 		</script>
 	</head>
 	<body>
