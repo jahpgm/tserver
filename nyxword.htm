@@ -151,7 +151,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
 
 		<script type="text/javascript">
-			sprintf = function (sPattern, args) {
+			sformat = function (sPattern, args) {
 				var _args = arguments;
 				return sPattern && sPattern.replace(/\%(\d+)/g, function (s, n) {
 					return _args[n];
@@ -164,7 +164,8 @@
 				function LoadPuzzle(date)
 				{
 					var date = date || $(".date-sel").datepicker("getDate");
-					var strParm = sprintf("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
+					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
+					var strParm = sformat("http://www.xwordinfo.com/Crossword?date=06/29/16", $.datepicker.formatDate("mm/dd/yy", date));
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
 					{
@@ -271,19 +272,17 @@
 			******************************************************************/
 			function XWord(el)
 			{
-				var el = this.element = $(el);
-				el.find(".PuzTable td:not([class=black])").on("click", this._onCellClick.bind(this)).each(function(idx, el)
+				var el = this._element = $(el);
+				var table = this._table = $(el.find("table"));
+				table.find("tr").each(function(idx, tr)
 				{
-					var cell = $(el);
-					var cellNum = parseInt(cell.children(".num").text());
-					if(!isNaN(cellNum))
+					var $tr = $(tr).attr("data-cy", idx);
+					$tr.find("td").each(function(row, col, td)
 					{
-						cell.data("clueNum", cellNum);
-						console.log(cellNum);
-					}
+						var $td = $(td);
+						$td.attr({"data-cy":row, "data-cx":col}).on("click", this._onCellClick.bind(this));
+					}.bind(this, idx));
 				}.bind(this));
-			
-				
 			};
 			var _p = XWord.prototype = new Object();
 
@@ -296,12 +295,41 @@
 			_p._selDir = XWord.DEFINES.SEL_HORIZONTAL;
 			_p._onCellClick = function(e)
 			{
-				var cell = $(e.target);
-				var clueNum = cell.closest(":has(.num)").data("clueNum");
-				console.log(clueNum);
-				debugger;
+				var cell = $(e.currentTarget);
+				if(!cell.hasClass("black"))
+				{
+					var data = cell.data();
+					this._findClue(data.cx, data.cy, this._selDir);
+				}
 			}
 
+			_p._findClue = function(cx, cy, dir)
+			{
+				//get target cell
+				var td = this._table.find(sformat("td[data-cx=%1][data-cy=%2]", cx, cy));
+
+				//get across clue start cell
+				var tdAcrossStart = td.prevUntil(".black").last();
+				tdAcrossStart = tdAcrossStart.length ? tdAcrossStart : td;
+				var acrossClueNum = tdAcrossStart.children(".num").text();
+
+				//get across clue end cell
+				var tdAcrossEnd = td.nextUntil(".black").last();
+				tdAcrossEnd = tdAcrossEnd.length ? tdAcrossEnd: td;
+
+				//get down clue start cell
+				var tdColumn = this._table.find(sformat("td[data-cx=%1]", cx));
+			};
+
+			jQuery.extend(jQuery.expr[':'], 
+			{
+				col:function(el, index, meta, stack)
+				{
+					var parm = meta[3].split(",");
+					var cx = $(el).data("cx");
+					return (cx == parm[0]);
+				}
+			});
 		</script>
 	</head>
 	<body>
