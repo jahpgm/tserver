@@ -5,6 +5,14 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 		<style type="text/css">
+			body
+			{
+				-webkit-user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
+				user-select:none;
+			}
+			
 			*{user-select:none;cursor: default;}
 			.vblack {background-color:#000000;visibility:visible;}
 			.black {background-color:#000000;visibility:visible;}
@@ -124,6 +132,11 @@
 				font-size:9pt;
 				font-weight:bold;
 				margin-bottom:3px;
+			}
+
+			.cell-selected
+			{
+				background-color:pink;
 			}
 
 			@media print
@@ -274,62 +287,78 @@
 			{
 				var el = this._element = $(el);
 				var table = this._table = $(el.find("table"));
-				table.find("tr").each(function(idx, tr)
+				
+				//map across clues
+				table.find("tr").each(function(idx, el)
 				{
-					var $tr = $(tr).attr("data-cy", idx);
-					$tr.find("td").each(function(row, col, td)
+					var curClue = XWord.DEFINES.CLUE_NUM_NULL;
+					$(el).find("td").each(function(row, col, el)
 					{
-						var $td = $(td);
-						$td.attr({"data-cy":row, "data-cx":col}).on("click", this._onCellClick.bind(this));
+						var td = $(el);
+						if(!td.hasClass("black"))
+						{
+							var clueNum = td.find(".num").text();
+							curClue = (curClue == XWord.DEFINES.CLUE_NUM_NULL) ? clueNum : curClue;
+						}
+						else
+							curClue = XWord.DEFINES.CLUE_NUM_NULL;
+						td.attr({"data-cy":row, "data-cx":col, "data-across":curClue})
+							.on("click", this._onCellClick.bind(this))
+							.on("contextmenu dblclick", this._onContextMenu.bind(this));
 					}.bind(this, idx));
 				}.bind(this));
+
+				//map down clues
+				table.find("tr:first td").each(function(idx, el)
+				{
+					var curClue = XWord.DEFINES.CLUE_NUM_NULL;
+					var col = this._table.find(sformat("td[data-cx=%1]", idx));
+					col.each(function(idx, el)
+					{
+						var td = $(el);
+						if(!td.hasClass("black"))
+						{
+							var clueNum = td.find(".num").text();
+							curClue = (curClue == XWord.DEFINES.CLUE_NUM_NULL) ? clueNum : curClue;
+						}
+						else
+							curClue = XWord.DEFINES.CLUE_NUM_NULL;
+						td.attr("data-down", curClue);
+					}.bind(this));
+				}.bind(this));
+			
+				this._selectClue(1, XWord.DEFINES.DIR_ACROSS);
 			};
 			var _p = XWord.prototype = new Object();
 
 			XWord.DEFINES = 
 			{
-				SEL_HORIZONTAL:0,
-				SEL_VERTICAL:1
+				DIR_ACROSS:"across",
+				DIR_DOWN:"down",
+				CLUE_NUM_NULL:-1,
 			};
+			_p._curClue = {"num":XWord.DEFINES.DIR_ACROSS, "dir":1};
 
-			_p._selDir = XWord.DEFINES.SEL_HORIZONTAL;
 			_p._onCellClick = function(e)
 			{
-				var cell = $(e.currentTarget);
-				if(!cell.hasClass("black"))
-				{
-					var data = cell.data();
-					this._findClue(data.cx, data.cy, this._selDir);
-				}
-			}
-
-			_p._findClue = function(cx, cy, dir)
-			{
-				//get target cell
-				var td = this._table.find(sformat("td[data-cx=%1][data-cy=%2]", cx, cy));
-
-				//get across clue start cell
-				var tdAcrossStart = td.prevUntil(".black").last();
-				tdAcrossStart = tdAcrossStart.length ? tdAcrossStart : td;
-				var acrossClueNum = tdAcrossStart.children(".num").text();
-
-				//get across clue end cell
-				var tdAcrossEnd = td.nextUntil(".black").last();
-				tdAcrossEnd = tdAcrossEnd.length ? tdAcrossEnd: td;
-
-				//get down clue start cell
-				var tdColumn = this._table.find(sformat("td[data-cx=%1]", cx));
+				var data = $(e.currentTarget).data();
+				this._selectClue(data[this._curClue.dir], this._curClue.dir);
 			};
 
-			jQuery.extend(jQuery.expr[':'], 
+			_p._onContextMenu = function(e)
 			{
-				col:function(el, index, meta, stack)
-				{
-					var parm = meta[3].split(",");
-					var cx = $(el).data("cx");
-					return (cx == parm[0]);
-				}
-			});
+				var data = $(e.currentTarget).data();
+				var dir = (this._curClue.dir == XWord.DEFINES.DIR_ACROSS) ?  XWord.DEFINES.DIR_DOWN :  XWord.DEFINES.DIR_ACROSS;
+				this._selectClue(data[dir], dir);
+				e.preventDefault();
+			};
+
+			_p._selectClue = function(clueNumber, dir)
+			{
+				this._table.find(sformat("[data-%1=%2]", this._curClue.dir, this._curClue.num)).removeClass("cell-selected");
+				this._table.find(sformat("[data-%1=%2]", dir, clueNumber)).addClass("cell-selected");
+				this._curClue = {"num":clueNumber, "dir":dir};
+			};
 		</script>
 	</head>
 	<body>
