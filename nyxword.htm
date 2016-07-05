@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<title>New York Times Daily Crossword</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style type="text/css">
 			body
 			{
@@ -136,7 +135,7 @@
 
 			.cell-selected
 			{
-				background-color:pink;
+				background-color:#e6ffd1;
 			}
 
 			@media print
@@ -144,6 +143,10 @@
 				.dlg-pzl-sel
 				{
 					display: none;
+				}
+				.cell-selected
+				{
+					background-color:inherit;
 				}
 			}
 			@media print and (orientation: landscape)
@@ -158,11 +161,9 @@
 				}
 			}
 		</style>
-
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
-
 		<script type="text/javascript">
 			sformat = function (sPattern, args) {
 				var _args = arguments;
@@ -178,7 +179,6 @@
 				{
 					var date = date || $(".date-sel").datepicker("getDate");
 					var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
-					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=06/29/16", $.datepicker.formatDate("mm/dd/yy", date));
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
 					{
@@ -226,7 +226,7 @@
 							}
 
 							var pCont = $(".puzzle-page-container");
-							pCont.data("puzzle", new XWord(pCont));
+							pCont.data("xWord", new XWord(pCont));
 						},
 						"error":function(xhr, strError, strMessage)
 						{
@@ -251,6 +251,7 @@
 				$(".make-diagramless").on("change", function(e)
 				{
 					$("td.black, td.bigshade, .num").toggleClass("puzzle-diagramless");
+					$(".puzzle-page-container").data("xWord").selectClue(XWord.DEFINES.INVALID_CLUE_NUM, "across");
 				});
 				
 				$(".show-answers").on("change", function(e)
@@ -291,69 +292,63 @@
 				//map across clues
 				table.find("tr").each(function(idx, el)
 				{
-					var curClue = XWord.DEFINES.CLUE_NUM_NULL;
+					var curClue = XWord.DEFINES.NULL_CLUE_NUM;
 					$(el).find("td").each(function(row, col, el)
 					{
 						var td = $(el);
 						if(!td.hasClass("black"))
 						{
 							var clueNum = td.find(".num").text();
-							curClue = (curClue == XWord.DEFINES.CLUE_NUM_NULL) ? clueNum : curClue;
+							curClue = (curClue == XWord.DEFINES.NULL_CLUE_NUM) ? clueNum : curClue;
 						}
 						else
-							curClue = XWord.DEFINES.CLUE_NUM_NULL;
-						td.attr({"data-cy":row, "data-cx":col, "data-across":curClue})
-							.on("click", this._onCellClick.bind(this))
-							.on("contextmenu dblclick", this._onContextMenu.bind(this));
+							curClue = XWord.DEFINES.NULL_CLUE_NUM;
+						td.attr({"data-cy":row, "data-cx":col, "data-across":curClue}).on("click dblclick contextmenu", this._onCellClick.bind(this));
 					}.bind(this, idx));
 				}.bind(this));
 
 				//map down clues
 				table.find("tr:first td").each(function(idx, el)
 				{
-					var curClue = XWord.DEFINES.CLUE_NUM_NULL;
-					var col = this._table.find(sformat("td[data-cx=%1]", idx));
-					col.each(function(idx, el)
+					var curClue = XWord.DEFINES.NULL_CLUE_NUM;
+					this._table.find(sformat("td[data-cx=%1]", idx)).each(function(idx, el)
 					{
 						var td = $(el);
 						if(!td.hasClass("black"))
 						{
 							var clueNum = td.find(".num").text();
-							curClue = (curClue == XWord.DEFINES.CLUE_NUM_NULL) ? clueNum : curClue;
+							curClue = (curClue == XWord.DEFINES.NULL_CLUE_NUM) ? clueNum : curClue;
 						}
 						else
-							curClue = XWord.DEFINES.CLUE_NUM_NULL;
+							curClue = XWord.DEFINES.NULL_CLUE_NUM;
 						td.attr("data-down", curClue);
 					}.bind(this));
 				}.bind(this));
 			
-				this._selectClue(1, XWord.DEFINES.DIR_ACROSS);
+				this.selectClue(1, XWord.DEFINES.DIR_ACROSS);
 			};
 			var _p = XWord.prototype = new Object();
-
 			XWord.DEFINES = 
 			{
 				DIR_ACROSS:"across",
 				DIR_DOWN:"down",
-				CLUE_NUM_NULL:-1,
+				NULL_CLUE_NUM:-1,
+				INVALID_CLUE_NUM:Infinity
 			};
+
 			_p._curClue = {"num":XWord.DEFINES.DIR_ACROSS, "dir":1};
 
 			_p._onCellClick = function(e)
 			{
 				var data = $(e.currentTarget).data();
-				this._selectClue(data[this._curClue.dir], this._curClue.dir);
-			};
-
-			_p._onContextMenu = function(e)
-			{
-				var data = $(e.currentTarget).data();
-				var dir = (this._curClue.dir == XWord.DEFINES.DIR_ACROSS) ?  XWord.DEFINES.DIR_DOWN :  XWord.DEFINES.DIR_ACROSS;
-				this._selectClue(data[dir], dir);
+				var dir = this._curClue.dir;
+				if(e.type == "dblclick" || e.type == "contextmenu")
+					dir = (this._curClue.dir == XWord.DEFINES.DIR_ACROSS) ?  XWord.DEFINES.DIR_DOWN :  XWord.DEFINES.DIR_ACROSS;
+				this.selectClue(data[dir], dir);
 				e.preventDefault();
 			};
 
-			_p._selectClue = function(clueNumber, dir)
+			_p.selectClue = function(clueNumber, dir)
 			{
 				this._table.find(sformat("[data-%1=%2]", this._curClue.dir, this._curClue.num)).removeClass("cell-selected");
 				this._table.find(sformat("[data-%1=%2]", dir, clueNumber)).addClass("cell-selected");
