@@ -137,6 +137,10 @@
 			{
 				background-color:#e6ffd1;
 			}
+			.cell-selected:focus
+			{
+				background-color:#a9bd99;
+			}
 
 			@media print
 			{
@@ -350,8 +354,8 @@
 
 			_p.selectClue = function(clueNumber, dir)
 			{
-				this._table.find(sformat("[data-%1=%2]", this._curClue.dir, this._curClue.num)).removeClass("cell-selected");
-				this._table.find(sformat("[data-%1=%2]", dir, clueNumber)).addClass("cell-selected");
+				this._table.find(sformat("[data-%1=%2]", this._curClue.dir, this._curClue.num)).removeClass("cell-selected").attr("tabindex", null);
+				this._table.find(sformat("[data-%1=%2]", dir, clueNumber)).addClass("cell-selected").attr("tabindex", "1");
 				this._curClue = {"num":clueNumber, "dir":dir};
 			};
 		</script>
