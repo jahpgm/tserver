@@ -17,7 +17,8 @@
 			.black {background-color:#000000;visibility:visible;}
 			.num{height:6pt;font-family:arial;font-size:6pt;visibility:visible}
 			.letter{height:100%;width:100%;font-family:helvetica;font-size:8pt;text-align:center;display:none;}
-			.bigcircle, .bigshade{background-color: silver;}
+			.bigshade{background-color:lightgray;}
+			.bigcircle{border-radius:50%;background-color:lightgray;}
 			.subst{font-family:verdana;font-size:8pt;text-align:center;display:none;}
 			.subst2{font-family:verdana;font-size:6pt;text-align:center;display:none;}
 			.copy{font-family:Arial;font-weight:bold;font-size:7pt}
@@ -183,6 +184,7 @@
 				{
 					var date = date || $(".date-sel").datepicker("getDate");
 					var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
+					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", "07/03/16");
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
 					{
