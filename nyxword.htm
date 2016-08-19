@@ -24,7 +24,7 @@
 			.copy{font-family:Arial;font-weight:bold;font-size:7pt}
 
 			.PuzTable {margin-bottom:0px;border-collapse:collapse;}
-			.PuzTable td {vertical-align:top;height:14px;width:14px;border:1px solid black;padding:0px;}
+			.PuzTable td {position:relative;vertical-align:top;height:14px;width:14px;border:1px solid black;padding:0px;}
 			.PuzTitle, .CPHContent_Copyright{font-family:Arial;font-weight:normal;font-size:8pt;}
 
 			.puzzle-diagramless
@@ -145,6 +145,12 @@
 
 			@media print
 			{
+				/*just in case three-hole-punch paper*/
+				.puzzle-page-container
+				{
+					margin:0in .25in 0in .25in;
+				}
+
 				.dlg-pzl-sel
 				{
 					display: none;
