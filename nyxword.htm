@@ -248,7 +248,7 @@
 				}
 
 				var date = new Date();
-				$(".date-sel").datepicker().datepicker("setDate", date).on("change", function(e)
+				$(".date-sel").datepicker({yearRange:"c-100:c+100",changeYear:true,changeMonth:true}).datepicker("setDate", date).on("change", function(e)
 				{
 					var date = $(e.target).datepicker("getDate");
 					LoadPuzzle(date);
