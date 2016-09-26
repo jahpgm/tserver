@@ -190,7 +190,7 @@
 				{
 					var date = date || $(".date-sel").datepicker("getDate");
 					var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
-					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", "07/03/16");
+					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", "07/07/16");
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
 					{
@@ -212,6 +212,7 @@
 						},
 						"success":function(puzzlePage, status, xhr)
 						{
+							console.dir(puzzlePage);
 							puzzlePage = puzzlePage.replace(/ : /g, "");
 
 							var $puzzPage = $(puzzlePage);
@@ -223,8 +224,8 @@
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
-							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find("#CPHContent_AcrossClues"));
-							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find("#CPHContent_DownClues"));
+							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find("#CPHContent_tdAcrossClues"));
+							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find("#CPHContent_tdDownClues"));
 
 							$(".show-answers").prop("checked", false);
 							$(".make-diagramless").prop("checked", false);
