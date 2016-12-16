@@ -213,10 +213,9 @@
 						"success":function(puzzlePage, status, xhr)
 						{
 							puzzlePage = puzzlePage.replace(/ : /g, "");
-
 							var $puzzPage = $(puzzlePage);
 							var $puzzTab = $puzzPage.find("#PuzTable");
-							var $puzzTitle = $puzzPage.find("#CPHContent_TitleLabel").addClass("PuzTitle");
+							var $puzzTitle = $puzzPage.find("#PuzTitle").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright").addClass("CPHContent_Copyright");
 							var $puzzSelection = $(".puzzle-selection");
 							var $puzzContainer = $(".puzzle-container").empty().append($puzzTitle, $puzzTab, $puzzCRight);
