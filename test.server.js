@@ -1,4 +1,5 @@
 const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
@@ -119,7 +120,7 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 {
 	var self = this;
 	var proxyInfo = url.parse(proxyUrl);
-	var clientRequest = http.request(proxyInfo, function(response)
+	var clientRequest = https.request(proxyInfo, function(response)
 	{
 		srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
 		response.on("data", function(chunk)

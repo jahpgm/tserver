@@ -189,7 +189,7 @@
 				function LoadPuzzle(date)
 				{
 					var date = date || $(".date-sel").datepicker("getDate");
-					var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
+					var strParm = sformat("https://www.xwordinfo.com/Crossword?date=%1", $.datepicker.formatDate("mm/dd/yy", date));
 					//var strParm = sformat("http://www.xwordinfo.com/Crossword?date=%1", "07/07/16");
 					var strUri = $("#proxyServer").prop("value");
 					switch(strUri)
