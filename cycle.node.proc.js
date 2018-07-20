@@ -31,7 +31,7 @@ _p.startProcess = function(curr, prev)
 		else
 		{
 			console.log(util.format("Cycler: Start '%s'", this._args.process));
-			this._cp = proc.fork(this._args.process, process.argv.slice(2));
+			this._cp = proc.fork(this._args.process, process.argv.slice(2), {"execArgv":["--inspect=localhost:9239"]});
 			this._cp.on("close", function(code, signal)
 			{
 				console.log(util.format("Cycler: Stop '%s'", this._args.process));

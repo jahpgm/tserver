@@ -1,1 +1,1 @@
-node cycle.node.proc.js -process test.server.js -port 8000 -webroot ..
+node %1 cycle.node.proc.js -process test.server.js -port 8000 -webroot ..
