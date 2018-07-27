@@ -23,6 +23,7 @@ var _p = TestServer.prototype;
 TestServer.CONTENT_TYPES =
 {
 	".txt":"text/plain",
+	".xml":"text/xml",
 	".htm":"text/html",
 	".html":"text/html",
 	".js":"text/javascript",
