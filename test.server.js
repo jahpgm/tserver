@@ -100,7 +100,7 @@ _p._handleInput = function(data)
 	{
 		var webRoot = strData.replace(/webroot\s*/g, "").trim();
 		if(webRoot)
-			setWebRoot(webRoot);
+			this.setWebRoot(webRoot);
 		else
 			this.log(process.cwd());
 	}
