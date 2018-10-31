@@ -212,8 +212,9 @@
 						},
 						"success":function(puzzlePage, status, xhr)
 						{
+							var parser = new DOMParser();
 							puzzlePage = puzzlePage.replace(/ : /g, "");
-							var $puzzPage = $(puzzlePage);
+							var $puzzPage = $(parser.parseFromString(puzzlePage, "text/html"));
 							var $puzzTab = $puzzPage.find("#PuzTable");
 							var $puzzTitle = $puzzPage.find("#PuzTitle").addClass("PuzTitle");
 							var $puzzCRight = $puzzPage.find("#CPHContent_Copyright").addClass("CPHContent_Copyright");
@@ -222,8 +223,8 @@
 							var $puzzPageContainer = $(".puzzle-page-container");
 							var $puzzAcrossHeader = $(".puzzle-across-header").detach();
 							var $puzzDownHeader = $(".puzzle-down-header").detach();
-							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find("#CPHContent_tdAcrossClues"));
-							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find("#CPHContent_tdDownClues"));
+							var $cluesAcross = $(".puzzle-clues-across").empty().append($puzzAcrossHeader, $puzzPage.find(".aclues div:not(.clueshead)"));
+							var $cluesDown = $(".puzzle-clues-down").empty().append($puzzDownHeader, $puzzPage.find(".dclues div:not(.clueshead)"));
 
 							$(".show-answers").prop("checked", false);
 							$(".make-diagramless").prop("checked", false);
