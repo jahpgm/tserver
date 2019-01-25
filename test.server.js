@@ -30,7 +30,10 @@ TestServer.CONTENT_TYPES =
 	".css":"text/css",
 	".png":"image/png",
 	".jpeg":"image/jpeg",
-	".gif":"image/gif"
+	".gif":"image/gif",
+	".woff":"font/woff",
+	".woff2":"font/woff2",
+	".ttf":"font/truetype"
 };
 TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[filePath.substring(filePath.lastIndexOf(".")).trim()] || TestServer.CONTENT_TYPES[".txt"]);};
 
