@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+//copyright (c) 2019 pgmjah. All rights reserved.
+
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
@@ -14,8 +17,8 @@ function TestServer(webroot, port)
 
 	this.on("request", this._onRequest.bind(this));
 	this._openLog(args.log_file, true);
-	this.listen(port, this._onListening.bind(this));
-	this.setWebRoot(webroot);
+	this.listen(port || 8000, this._onListening.bind(this));
+	this.setWebRoot(webroot || process.cwd());
 }
 util.inherits(TestServer, http.Server);
 var _p = TestServer.prototype;
@@ -39,8 +42,9 @@ TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[
 
 _p._onListening = function()
 {
-	this.log(util.format("Server: ***** Listening on port %s *****", args.port))
-	process.title = util.format("Server: listening on port %s", args.port);
+	let address = this.address();
+	this.log(util.format("Server: ***** Listening on port %s *****", address.port))
+	process.title = util.format("TestServer: listening on port %s", address.port);
 };
 
 _p.setWebRoot = function(rootPath)
