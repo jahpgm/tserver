@@ -1,0 +1,32 @@
+{
+	"version": "0.0.1",
+	"publisher": "pgmjah",
+	"name": "tserver",
+	"displayName": "TestServer",
+	"description": "Simple HTTP server for lightweight web development.",
+	"author": {
+		"name": "pgmjah",
+		"email": "pgmjah@gmail.com"
+	},
+	"license": "SEE LICENSE IN license.txt",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pgmjah/tserver.git"
+	},
+	"keywords": [
+		"HTTP",
+		"Server",
+		"Lightweight"
+	],
+	"main": "test.server.js",
+	"bin":{
+		"tserver": "test.server.js"
+	},
+	"files": [
+		"test.server.js"
+	],
+	"dependencies": {
+		"pgmjah-filesync": "file:../filesync"
+	},
+
+}
