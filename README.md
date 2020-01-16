@@ -13,3 +13,8 @@ Will be adding a config file soon so you don't have to pass command line argumen
 }
 ```
 
+## Commands
+* cls - Clear the screen.
+* clog - Clear the current log file.
+* log - pipe the current log file to the screen.
+
