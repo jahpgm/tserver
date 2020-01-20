@@ -149,19 +149,13 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 
 _p.loadPage = function(srvPath, srvRequest, srvResponse)
 {
-	var regExp = new RegExp(`^/${this._config.webApp.webRoot.alias}`);
-	if(!regExp.test(srvPath))
+	var rootPath = paths.resolve(process.cwd(), this._config.webApp.webRoot || ".");
+	this._config.webApp.maps.map((mapEntry)=>
 	{
-		let err = `<html><body>Dat s*$!t is forbidden, yo!: ${srvPath}</body></html>`;
-		srvResponse.writeHead(403, "Forbidden", {"content-type":"text/html"});
-		srvResponse.end(err);
-		this.log("Server: " + err);
-		return;
-	}
-
-	var filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, this._config.webApp.webRoot.dir)
+		srvPath = srvPath.replace(`/${mapEntry.alias}`, mapEntry.dir);
+	})
 	this.log("Server: Requesting File: " + srvPath);
-	fs.readFile(filePath, function(srvPath, srvRequest, srvResponse, err, data)
+	fs.readFile(srvPath, function(srvPath, srvRequest, srvResponse, err, data)
 	{
 		if(err)
 		{

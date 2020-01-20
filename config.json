@@ -5,17 +5,18 @@
 	"webApp":
 	{
 		"port":8000,
-		"webRoot":{"alias":"ibi_apps", "dir":"C:/ibi/WebFOCUS82/webapps/webfocus"},
+		"webRoot":"C:/ibi/WebFOCUS82/webapps/webfocus",
 		"maps":
-		{
-			"3rdparty_resources":{"dir":"C:/dev/wf/3rdparty_resources/src/main/resources/META-INF/resources/3rdparty_resources"},
-			"bootstrap":{"dir":"C:/dev/wf/3rdparty_resources/src/main/resources/META-INF/resources/bootstrap"},
-			"homepage":{"dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxtools/src/main/resources/META-INF/resources/homepage"},
-			"ibx":{"dir":"C:/dev/wf/ibx/src/main/resources/META-INF/resources/ibx"},
-			"ibxtools":{"dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxtools/src/main/resources/META-INF/resources/ibxtools"},
-			"caster":{"dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxcaster/src/main/resources/META-INF/resources/ibxcaster"},
-			"intl":{"dir":"C:/dev/wf/intl/src/main/resources/com/ibi/intl"}
-		}
+		[
+			{"alias":"ibi_apps/3rdparty_resources", "dir":"C:/dev/wf/3rdparty_resources/src/main/resources/META-INF/resources/3rdparty_resources"},
+			{"alias":"ibi_apps/bootstrap", "dir":"C:/dev/wf/3rdparty_resources/src/main/resources/META-INF/resources/bootstrap"},
+			{"alias":"ibi_apps/homepage", "dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxtools/src/main/resources/META-INF/resources/homepage"},
+			{"alias":"ibi_apps/ibx", "dir":"C:/dev/wf/ibx/src/main/resources/META-INF/resources/ibx"},
+			{"alias":"ibi_apps/ibx_testing", "dir":"C:/dev/wf/ibx/src/test/resources/META-INF/resources/ibx/testing"},
+			{"alias":"ibi_apps/ibxtools", "dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxtools/src/main/resources/META-INF/resources/ibxtools"},
+			{"alias":"ibi_apps/caster", "dir":"C:/dev/wf/ibxtools/webfocus-webjars-ibxcaster/src/main/resources/META-INF/resources/ibxcaster"},
+			{"alias":"ibi_apps/intl", "dir":"C:/dev/wf/intl/src/main/resources/com/ibi/intl"}
+		]
 	}
 	
 }
