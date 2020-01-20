@@ -4,21 +4,26 @@
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
-const path = require("path");
-const url = require("url");
+const paths = require("path");
+const urls = require("url");
 const util = require("util");
 const readline = require("readline");
 const args = require("./args.js");
 
-function TestServer(webroot, port)
+function TestServer(cfgFilename)
 {
 	http.Server.call(this);
-	process.stdin.on("data", this._handleInput.bind(this));
 
+	if(!cfgFilename)
+		throw("No config file specified!");
+
+	var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
+	this._config = JSON.parse(cfgFile);
+
+	process.stdin.on("data", this._handleInput.bind(this));
 	this.on("request", this._onRequest.bind(this));
 	this._openLog(args.log_file, true);
-	this.listen(port || 8000, this._onListening.bind(this));
-	this.setWebRoot(webroot || process.cwd());
+	this.listen(this._config.webApp.port, this._onListening.bind(this));
 }
 util.inherits(TestServer, http.Server);
 var _p = TestServer.prototype;
@@ -47,20 +52,12 @@ _p._onListening = function()
 	process.title = util.format("TestServer: listening on port %s", address.port);
 };
 
-_p.setWebRoot = function(rootPath)
-{
-	//The previous way of resolving the root path didn't work on UNIX...had to change to path.resolve.
-	rootPath = path.normalize(path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath));
-	process.chdir(rootPath);
-	this.log(util.format("Server: webroot '%s'", rootPath));
-};
-
 _p._logName = "";
 _p._logStream = null;
 _p._openLog = function(logPath, bAppend)
 {
 	logPath = logPath || ".\\test.server.log.txt";
-	this._logName = path.normalize(path.isAbsolute(logPath) ? logPath : util.format("%s\\%s", path.parse(require.main.filename).dir, logPath));
+	this._logName = paths.normalize(paths.isAbsolute(logPath) ? logPath : util.format("%s\\%s", paths.parse(require.main.filename).dir, logPath));
 	this._logStream = fs.createWriteStream(this._logName, {flags: bAppend ? "a+" : "w+"});
 	this.log("Server: logging to " + this._logName);
 };
@@ -84,7 +81,7 @@ _p._handleInput = function(data)
 	else
 	if(strData.search("log") == 0)
 	{
-		this.log(util.format("========== START %s ==========", path.parse(this._logName).name), true);
+		this.log(util.format("========== START %s ==========", paths.parse(this._logName).name), true);
 		fs.createReadStream(this._logName).pipe(process.stdout);
 	}
 	else
@@ -115,7 +112,7 @@ _p._handleInput = function(data)
 
 _p._onRequest = function(request, response)
 {
-	var urlInfo = url.parse(request.url, true);
+	var urlInfo = urls.parse(request.url, true);
 	var query = urlInfo.query;
 
 	if((urlInfo.pathname.search("/proxy/load") == 0) && query.uri)
@@ -127,7 +124,7 @@ _p._onRequest = function(request, response)
 _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 {
 	var self = this;
-	var proxyInfo = url.parse(proxyUrl);
+	var proxyInfo = urls.parse(proxyUrl);
 	var clientRequest = https.request(proxyInfo, function(response)
 	{
 		srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
@@ -152,7 +149,17 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 
 _p.loadPage = function(srvPath, srvRequest, srvResponse)
 {
-	var filePath = path.normalize(process.cwd() + srvPath);
+	var regExp = new RegExp(`^/${this._config.webApp.webRoot.alias}`);
+	if(!regExp.test(srvPath))
+	{
+		let err = `<html><body>Dat s*$!t is forbidden, yo!: ${srvPath}</body></html>`;
+		srvResponse.writeHead(403, "Forbidden", {"content-type":"text/html"});
+		srvResponse.end(err);
+		this.log("Server: " + err);
+		return;
+	}
+
+	var filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, this._config.webApp.webRoot.dir)
 	this.log("Server: Requesting File: " + srvPath);
 	fs.readFile(filePath, function(srvPath, srvRequest, srvResponse, err, data)
 	{
@@ -172,4 +179,4 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 }; 
 
 //Create the instance of the TestServer.
-var ts = new TestServer(args.webroot, args.port);
+var ts = new TestServer(process.argv[2]);
