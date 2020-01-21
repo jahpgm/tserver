@@ -12,7 +12,7 @@
 				"<node_internals>/**"
 			],
 			"program": "${workspaceFolder}\\test.server.js",
-			"args": ["../tserver/./config.json"],
+			"args": ["config.json"],
 		}
 	]
 }

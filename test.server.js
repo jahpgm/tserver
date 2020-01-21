@@ -149,13 +149,17 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 
 _p.loadPage = function(srvPath, srvRequest, srvResponse)
 {
-	var rootPath = paths.resolve(process.cwd(), this._config.webApp.webRoot || ".");
+	srvPath = srvPath.replace(/\\/g, "/");
+	var filePath = "";
 	this._config.webApp.maps.map((mapEntry)=>
 	{
-		srvPath = srvPath.replace(`/${mapEntry.alias}`, mapEntry.dir);
+		var regEx = new RegExp(`^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/`)
+		if(regEx.test(srvPath))
+			filePath = srvPath.replace(regEx, `${mapEntry.dir}/`);
 	})
+
 	this.log("Server: Requesting File: " + srvPath);
-	fs.readFile(srvPath, function(srvPath, srvRequest, srvResponse, err, data)
+	fs.readFile(filePath, function(filePath, srvRequest, srvResponse, err, data)
 	{
 		if(err)
 		{
@@ -169,7 +173,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 			srvResponse.end(data);
 			this.log(util.format("Server: Returning File: %s", filePath));
 		}
-	}.bind(this, srvPath, srvRequest, srvResponse));
+	}.bind(this, filePath, srvRequest, srvResponse));
 }; 
 
 //Create the instance of the TestServer.
