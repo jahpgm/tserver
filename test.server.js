@@ -150,13 +150,20 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 _p.loadPage = function(srvPath, srvRequest, srvResponse)
 {
 	srvPath = srvPath.replace(/\\/g, "/");
+	var mapped = false;
 	var filePath = "";
 	this._config.webApp.maps.map((mapEntry)=>
 	{
 		var regEx = new RegExp(`^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/`)
 		if(regEx.test(srvPath))
+		{
 			filePath = srvPath.replace(regEx, `${mapEntry.dir}/`);
+			mapped = true;
+		}
 	})
+
+	if(!mapped)
+		filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, this._config.webApp.webRoot.dir);
 
 	this.log("Server: Requesting File: " + srvPath);
 	fs.readFile(filePath, function(filePath, srvRequest, srvResponse, err, data)
