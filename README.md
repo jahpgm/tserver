@@ -2,12 +2,12 @@
 
 Simple Node.js http server...just used for lightweight development purposes.
 
-## Arguments
-* -webroot The directory that acts as the root of the web app.
-* -port The port number you want the server to listen on.
+## Install/Run
+* Global - npm install -g pgmjah-tserverw ill install as a global node program.  To run: tserver config_file.json
+* Local - npm install pgmjah-tserver. To run node test.server.js config_file.json
 
 ## Config
-Will be adding a config file soon so you don't have to pass command line arguments.
+JSON file to configure the server.
 ```javascript
 {
 	"serverConfig":
@@ -19,7 +19,7 @@ Will be adding a config file soon so you don't have to pass command line argumen
 		"webRoot":{"alias":"web_root", "dir":"C:/dev"},
 		"maps":
 		[
-			{"alias":"mappedDir", "dir":"C:/some_dir/some_dir/dir_to_mapp"}
+			{"alias":"map_dir", "dir":"C:/some_dir/some_dir/dir_to_map"}
 		]
 	}
 	
@@ -29,7 +29,11 @@ Will be adding a config file soon so you don't have to pass command line argumen
 * webApp - information about how to configure the server for the app.
 * port - the port for the server to listen on for the app.
 * webRoot - object with the web app's root directory (above which you can't navigate).
+	* alias - the name of the root you want to use in the url.
+	* dir - the physical directory mapped to the alias.
 * maps - Optional array of objects to map url aliases to physical directories.
+	* alias - the name of directory you want to use in the url.
+	* dir - the physical directory mapped to the alias.
 
 ## Commands
 * cls - Clear the screen.
