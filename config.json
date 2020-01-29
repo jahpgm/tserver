@@ -20,21 +20,3 @@
 	}
 	
 }
-
-
-
-{
-	"serverConfig":
-	{
-	},
-	"webApp":
-	{
-		"port":8000,
-		"webRoot":{"alias":"web_root", "dir":"C:/dev"},
-		"maps":
-		[
-			{"alias":"mappedDir", "dir":"C:/some_dir/some_dir/dir_to_mapp"}
-		]
-	}
-	
-}
