@@ -5,7 +5,7 @@
 	"webApp":
 	{
 		"port":8000,
-		"webRoot":{"alias":"ibi_apps", "dir":"C:/dev"},
+		"webRoot":{"alias":"", "dir":"C:/dev"},
 		"maps":
 		[
 			{"alias":"3rdparty_resources", "dir":"C:/dev/wf/3rdparty_resources/src/main/resources/META-INF/resources/3rdparty_resources"},

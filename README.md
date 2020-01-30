@@ -16,7 +16,7 @@ JSON file to configure the server.
 	"webApp":
 	{
 		"port":8000,
-		"webRoot":{"alias":"web_root", "dir":"C:/dev"},
+		"webRoot":{"alias":"dev", "dir":"C:/dev"},
 		"maps":
 		[
 			{"alias":"map_dir", "dir":"C:/some_dir/some_dir/dir_to_map"}

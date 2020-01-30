@@ -14,11 +14,31 @@ function TestServer(cfgFilename)
 {
 	http.Server.call(this);
 
-	if(!cfgFilename)
-		throw("No config file specified!");
+	cfgFilename = cfgFilename || "config.json";
 
-	var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
-	this._config = JSON.parse(cfgFile);
+	try
+	{
+		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
+		this._config = JSON.parse(cfgFile);
+	}
+	catch(ex)
+	{
+		this._config =
+		{
+			"serverConfig":
+			{
+			},
+			"webApp":
+			{
+				"port":8000,
+				"webRoot":{"alias":"", "dir":process.cwd()},
+				"maps":
+				[
+				]
+			}
+			
+		}
+	}
 
 	process.stdin.on("data", this._handleInput.bind(this));
 	this.on("request", this._onRequest.bind(this));
@@ -48,6 +68,8 @@ TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[
 _p._onListening = function()
 {
 	let address = this.address();
+	let webRoot = this._config.webApp.webRoot;
+	this.log(util.format("Server: WebRoot - alias: '%s', dir: %s", webRoot.alias, webRoot.dir));
 	this.log(util.format("Server: ***** Listening on port %s *****", address.port))
 	process.title = util.format("TestServer: listening on port %s", address.port);
 };
@@ -154,7 +176,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	var filePath = "";
 	this._config.webApp.maps.map((mapEntry)=>
 	{
-		var regEx = new RegExp(`^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/`)
+		var regEx = new RegExp( this._config.webApp.webRoot.alias ? `^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/` : `/${mapEntry.alias}`);
 		if(regEx.test(srvPath))
 		{
 			filePath = srvPath.replace(regEx, `${mapEntry.dir}/`);
@@ -163,7 +185,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	})
 
 	if(!mapped)
-		filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, this._config.webApp.webRoot.dir);
+		filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, `${this._config.webApp.webRoot.dir}/`);
 
 	this.log("Server: Requesting File: " + srvPath);
 	fs.readFile(filePath, function(filePath, srvRequest, srvResponse, err, data)

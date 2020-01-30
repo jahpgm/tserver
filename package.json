@@ -1,5 +1,5 @@
 {
-	"version": "1.0.8",
+	"version": "1.0.11",
 	"publisher": "pgmjah",
 	"name": "pgmjah-tserver",
 	"displayName": "TestServer",
@@ -26,5 +26,8 @@
 		"test.server.js",
 		"cycle.node.proc.js",
 		"args.js"
-	]
+	],
+	"scripts": {
+		"start":"node test.server.js"
+	}
 }
