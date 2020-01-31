@@ -14,8 +14,6 @@ function TestServer(cfgFilename)
 {
 	http.Server.call(this);
 
-	cfgFilename = cfgFilename || "config.json";
-
 	try
 	{
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
@@ -25,8 +23,9 @@ function TestServer(cfgFilename)
 	{
 		this._config =
 		{
-			"serverConfig":
+			"server":
 			{
+				"log":false
 			},
 			"webApp":
 			{
@@ -78,10 +77,13 @@ _p._logName = "";
 _p._logStream = null;
 _p._openLog = function(logPath, bAppend)
 {
-	logPath = logPath || ".\\test.server.log.txt";
-	this._logName = paths.normalize(paths.isAbsolute(logPath) ? logPath : util.format("%s\\%s", paths.parse(require.main.filename).dir, logPath));
-	this._logStream = fs.createWriteStream(this._logName, {flags: bAppend ? "a+" : "w+"});
-	this.log("Server: logging to " + this._logName);
+	if(this._config.server.log)
+	{	
+		logPath = logPath || ".\\test.server.log.txt";
+		this._logName = paths.normalize(paths.isAbsolute(logPath) ? logPath : util.format("%s\\%s", paths.parse(require.main.filename).dir, logPath));
+		this._logStream = fs.createWriteStream(this._logName, {flags: bAppend ? "a+" : "w+"});
+		this.log("Server: logging to " + this._logName);
+	}
 };
 
 _p.log = function(strLog, bNoWrite)
