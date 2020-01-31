@@ -14,6 +14,7 @@ function TestServer(cfgFilename)
 {
 	http.Server.call(this);
 
+	cfgFilename = cfgFilename || "";
 	try
 	{
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
@@ -37,7 +38,7 @@ function TestServer(cfgFilename)
 			}
 			
 		}
-		console.log(`Server: error parsing config file: ${cfgFilename}`)
+		console.log(cfgFilename ? `Server: error parsing config file: ${cfgFilename} (${ex.message})` : `Server: No config specified.`)
 	}
 
 	process.stdin.on("data", this._handleInput.bind(this));
@@ -50,7 +51,7 @@ var _p = TestServer.prototype;
 
 TestServer.CONTENT_TYPES =
 {
-	".gz":"application/x-compressed",
+	".gz":"application/x-gzip",
 	".txt":"text/plain",
 	".xml":"text/xml",
 	".htm":"text/html",
@@ -65,6 +66,18 @@ TestServer.CONTENT_TYPES =
 	".ttf":"font/truetype"
 };
 TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[filePath.substring(filePath.lastIndexOf(".")).trim()] || TestServer.CONTENT_TYPES[".txt"]);};
+TestServer.fileExists = function(filepath)
+{
+	let fStat = null;
+	try
+	{
+		fStat = fs.statSync(filepath);
+	}
+	catch(ex)
+	{
+	}
+	return fStat;
+}
 
 _p._onListening = function()
 {
@@ -191,7 +204,21 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	if(!mapped)
 		filePath = srvPath.replace(`/${this._config.webApp.webRoot.alias}`, `${this._config.webApp.webRoot.dir}/`);
 
+
 	this.log("Server: Requesting File: " + srvPath);
+
+	//set the headers for the content type.
+	let headers = {"content-type":TestServer.getContentType(filePath)};
+
+	//see if there's a gzip file to return instead of raw file.
+	let gzFilePath = `${filePath}.gz`;
+	if(TestServer.fileExists(gzFilePath))
+	{
+		headers["Content-Encoding"] = "gzip";//add gzip header.
+		filePath = gzFilePath;
+	}
+
+	//get the file and return it!
 	fs.readFile(filePath, function(filePath, srvRequest, srvResponse, err, data)
 	{
 		if(err)
@@ -202,7 +229,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		}
 		else
 		{
-			srvResponse.writeHead(200, "OK", {"content-type":TestServer.getContentType(srvPath)});
+			srvResponse.writeHead(200, "OK", headers);
 			srvResponse.end(data);
 			this.log(util.format("Server: Returning File: %s", filePath));
 		}
