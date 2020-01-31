@@ -37,6 +37,7 @@ function TestServer(cfgFilename)
 			}
 			
 		}
+		console.log(`Server: error parsing config file: ${cfgFilename}`)
 	}
 
 	process.stdin.on("data", this._handleInput.bind(this));
@@ -49,6 +50,7 @@ var _p = TestServer.prototype;
 
 TestServer.CONTENT_TYPES =
 {
+	".gz":"application/x-compressed",
 	".txt":"text/plain",
 	".xml":"text/xml",
 	".htm":"text/html",
