@@ -213,7 +213,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	var filePath = "";
 	this._config.webApp.maps.map((mapEntry)=>
 	{
-		var regEx = new RegExp( this._config.webApp.webRoot.alias ? `^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/` : `/${mapEntry.alias}`);
+		var regEx = new RegExp( this._config.webApp.webRoot.alias ? `^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/` : `/${mapEntry.alias}/`);
 		if(regEx.test(srvPath))
 		{
 			filePath = srvPath.replace(regEx, `${mapEntry.dir}/`);

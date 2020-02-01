@@ -45,5 +45,6 @@ JSON file to configure the server.
 * log - pipe the current log file to the screen.
 
 ## Changelog
+* 1.0.16 - Fixed mapped directory resolution when mapped value was actually part of the endpoint of the url.
 
 * 1.0.15 - Added better default config handling...if you don't supply various values, I'll overlay defaults on top.
