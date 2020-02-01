@@ -19,7 +19,7 @@ JSON file to configure the server.
 	"webApp":
 	{
 		"port":8000,
-		"webRoot":{"alias":"dev", "dir":"C:/dev"},
+		"webRoot":{"alias":"some_root_name", "dir":"some/dir"},
 		"maps":
 		[
 			{"alias":"map_dir", "dir":"C:/some_dir/some_dir/dir_to_map"}
@@ -31,10 +31,10 @@ JSON file to configure the server.
 * server - global settings for the server.
 	* log - write all server requests to 'test.server.log.txt'.
 * webApp - information about how to configure the server for the app.
-* port - the port for the server to listen on for the app.
+* port - the port for the server to listen on for the app (default 8000).
 * webRoot - object with the web app's root directory (above which you can't navigate).
-	* alias - the name of the root you want to use in the url.
-	* dir - the physical directory mapped to the alias.
+	* alias - the name of the root you want to use in the url (default "/").
+	* dir - the physical directory mapped to the alias (default current working directory).
 * maps - Optional array of objects to map url aliases to physical directories.
 	* alias - the name of directory you want to use in the url.
 	* dir - the physical directory mapped to the alias.
@@ -43,3 +43,7 @@ JSON file to configure the server.
 * cls - Clear the screen.
 * clog - Clear the current log file.
 * log - pipe the current log file to the screen.
+
+## Changelog
+
+* 1.0.15 - Added better default config handling...if you don't supply various values, I'll overlay defaults on top.

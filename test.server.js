@@ -19,27 +19,30 @@ function TestServer(cfgFilename)
 	{
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
 		this._config = JSON.parse(cfgFile);
+		// this._config.webRoot.alias = this._config.webRoot.alias || "";
+		// this._config.webRoot.dir = this._config.webRoot.dir || process.cwd();
+		// this._config.webRoot.port = this._config.webRoot.port || 8000
 	}
 	catch(ex)
 	{
-		this._config =
-		{
-			"server":
-			{
-				"log":false
-			},
-			"webApp":
-			{
-				"port":8000,
-				"webRoot":{"alias":"", "dir":process.cwd()},
-				"maps":
-				[
-				]
-			}
-			
-		}
 		console.log(cfgFilename ? `Server: error parsing config file: ${cfgFilename} (${ex.message})` : `Server: No config specified.`)
 	}
+
+	this._config = TestServer.extend(
+	{
+		"server":
+		{
+			"log":false
+		},
+		"webApp":
+		{
+			"port":8000,
+			"webRoot":{"alias":"", "dir":process.cwd()},
+			"maps":[]
+		}
+		
+	}, this._config);
+
 
 	process.stdin.on("data", this._handleInput.bind(this));
 	this.on("request", this._onRequest.bind(this));
@@ -78,6 +81,23 @@ TestServer.fileExists = function(filepath)
 	}
 	return fStat;
 }
+TestServer.extend = function extend()
+{
+	var arObjects = Array.from(arguments);
+	var oRet = arObjects.shift();
+	while(arObjects.length)
+	{
+		var oSrc = arObjects.shift();
+		for(var key in oSrc)
+		{
+			var member = oSrc[key];
+			if(oSrc.hasOwnProperty(key))
+				oRet[key] = ((member instanceof Object) && (typeof(member) != "function") && !(member instanceof Array)) ? TestServer.extend({}, oRet[key], member) : member;
+		}
+	}
+	return oRet;
+};
+
 
 _p._onListening = function()
 {
