@@ -46,4 +46,8 @@ JSON file to configure the server.
 
 ## Changelog
 
+* 1.0.17 - Better startup information about config file, mappings, etc.
+
+* 1.0.16 - Fixed mapped directory resolution when mapped value was actually part of the endpoint of the url.
+
 * 1.0.15 - Added better default config handling...if you don't supply various values, I'll overlay defaults on top.
