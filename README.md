@@ -15,6 +15,7 @@ JSON file to configure the server.
 	"server":
 	{
 		"log":false,
+		"silent":false
 	},
 	"webApp":
 	{
@@ -45,7 +46,8 @@ JSON file to configure the server.
 * log - pipe the current log file to the screen.
 
 ## Changelog
-* 1.0.16 - Fixed mapped directory resolution when mapped value was actually part of the endpoint of the url.
+
+* 1.0.18 - Added config option for settings.silent to stop logging to console.  Also exported TestServer so it can be run from other modules.
 
 * 1.0.17 - Better startup information about config file, mappings, etc.
 

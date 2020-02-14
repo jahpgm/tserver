@@ -30,7 +30,8 @@ function TestServer(cfgFilename)
 	{
 		"server":
 		{
-			"log":false
+			"log":false,
+			"silent":false
 		},
 		"webApp":
 		{
@@ -46,6 +47,7 @@ function TestServer(cfgFilename)
 	this.on("request", this._onRequest.bind(this));
 	this._openLog(args.log_file, true);
 	this.listen(this._config.webApp.port, this._onListening.bind(this));
+	this.on("close", this._onServerClosed.bind(this));
 }
 util.inherits(TestServer, http.Server);
 var _p = TestServer.prototype;
@@ -112,6 +114,10 @@ _p._onListening = function()
 	this.log(util.format("Server: ***** Listening on port %s *****", address.port))
 	process.title = util.format("TestServer: listening on port %s", address.port);
 };
+_p._onServerClosed = function()
+{
+	this.log(util.format("Server: ***** CLOSED *****"));
+};
 
 _p._logName = "";
 _p._logStream = null;
@@ -128,12 +134,12 @@ _p._openLog = function(logPath, bAppend)
 
 _p.log = function(strLog, bNoWrite)
 {
-	if(!bNoWrite)
+	if(!bNoWrite && !this._config.server.silent)
 	{
 		var date = new Date();
 		(this._logStream && this._logStream.write(util.format("%s:%s:%s %s/%s/%s %s\r\n", date.getHours(), date.getMinutes(), date.getSeconds(), date.getMonth() + 1, date.getDate(), date.getFullYear(), strLog)));
+		console.log(strLog);
 	}
-	console.log(strLog);
 };
 _p.logReset = function(){process.stdout.write("\33c");};
 
@@ -261,5 +267,8 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	}.bind(this, filePath, srvRequest, srvResponse));
 }; 
 
-//Create the instance of the TestServer.
-var ts = new TestServer(process.argv[2]);
+//Create the instance of the TestServer if running standalone.
+if(!module.parent)
+	var ts = new TestServer(process.argv[2]);
+
+module.exports = {TestServer};
