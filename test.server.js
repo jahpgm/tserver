@@ -19,9 +19,7 @@ function TestServer(cfgFilename)
 	{
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
 		this._config = JSON.parse(cfgFile);
-		// this._config.webRoot.alias = this._config.webRoot.alias || "";
-		// this._config.webRoot.dir = this._config.webRoot.dir || process.cwd();
-		// this._config.webRoot.port = this._config.webRoot.port || 8000
+		this._config.filename = cfgFilename;
 	}
 	catch(ex)
 	{
@@ -103,7 +101,14 @@ _p._onListening = function()
 {
 	let address = this.address();
 	let webRoot = this._config.webApp.webRoot;
-	this.log(util.format("Server: WebRoot - alias: '%s', dir: %s", webRoot.alias, webRoot.dir));
+	let maps = this._config.webApp.maps;
+	this.log(util.format("Server: Config File: %s", this._config.filename || "Internal Default"));
+	this.log(util.format("Server: WebRoot - alias: '/%s', dir: %s", webRoot.alias, webRoot.dir));
+	for(var i = 0; i < maps.length; ++i)
+	{
+		var map = maps[i];
+		this.log(util.format("Server: Map - %s => %s", map.alias, map.dir));
+	}
 	this.log(util.format("Server: ***** Listening on port %s *****", address.port))
 	process.title = util.format("TestServer: listening on port %s", address.port);
 };
