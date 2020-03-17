@@ -141,7 +141,7 @@ _p.log = function(strLog, bNoWrite)
 		console.log(strLog);
 	}
 };
-_p.logReset = function(){process.stdout.write("\33c");};
+_p.logReset = function(){process.stdout.write("0o33c");};
 
 _p._handleInput = function(data)
 {
