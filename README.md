@@ -47,6 +47,8 @@ JSON file to configure the server.
 
 ## Changelog
 
+* 1.0.19 - Fixed deprecated octal in logReset.
+
 * 1.0.18 - Added config option for settings.silent to stop logging to console.  Also exported TestServer so it can be run from other modules.
 
 * 1.0.17 - Better startup information about config file, mappings, etc.
