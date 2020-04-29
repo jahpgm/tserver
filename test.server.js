@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 //copyright (c) 2019 pgmjah. All rights reserved.
 
+const os = require("os");
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
@@ -111,7 +112,7 @@ _p._onListening = function()
 		var map = maps[i];
 		this.log(util.format("Server: Map - %s => %s", map.alias, map.dir));
 	}
-	this.log(util.format("Server: ***** Listening on port %s *****", address.port))
+	this.log(util.format("Server: ***** Listening at %s on port %s *****", getLocalIPAddress(), address.port))
 	process.title = util.format("TestServer: listening on port %s", address.port);
 };
 _p._onServerClosed = function()
@@ -266,6 +267,22 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		}
 	}.bind(this, filePath, srvRequest, srvResponse));
 }; 
+
+function getLocalIPAddress()
+{
+	var ifaces = os.networkInterfaces();
+	var ipAddress = "";
+	Object.keys(ifaces).forEach((ifname) => {
+		if(ifname !== 'Ethernet 2')
+			return;
+		ifaces[ifname].forEach((iface) => {
+			if ('IPv4' === iface.family && iface.internal === false) {
+				ipAddress = iface.address;
+			}
+		});
+	});
+	return ipAddress;
+}
 
 //Create the instance of the TestServer if running standalone.
 if(!module.parent)

@@ -47,6 +47,8 @@ JSON file to configure the server.
 
 ## Changelog
 
+* 1.0.20 - Show ip address and port on startup so we know where, and what we're listening on.
+
 * 1.0.19 - Fixed deprecated octal in logReset.
 
 * 1.0.18 - Added config option for settings.silent to stop logging to console.  Also exported TestServer so it can be run from other modules.
