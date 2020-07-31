@@ -47,6 +47,8 @@ JSON file to configure the server.
 
 ## Changelog
 
+* 1.0.21 - Added svg mime type.
+
 * 1.0.20 - Show ip address and port on startup so we know where, and what we're listening on.
 
 * 1.0.19 - Fixed deprecated octal in logReset.
