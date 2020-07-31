@@ -65,6 +65,7 @@ TestServer.CONTENT_TYPES =
 	".png":"image/png",
 	".jpeg":"image/jpeg",
 	".gif":"image/gif",
+	".svg":"image/svg+xml",
 	".woff":"font/woff",
 	".woff2":"font/woff2",
 	".ttf":"font/truetype"
