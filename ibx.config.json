@@ -1,6 +1,9 @@
 {
 	"server":
 	{
+		"plugins":[
+			"./pluginTest.js"
+		]
 	},
 	"webApp":
 	{

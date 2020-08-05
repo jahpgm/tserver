@@ -21,6 +21,10 @@ function TestServer(cfgFilename)
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
 		this._config = JSON.parse(cfgFile);
 		this._config.filename = cfgFilename;
+		this._config.server.plugins = this._config.server.plugins || [];
+		this._config.server.plugins = this._config.server.plugins.map((plugin)=>{
+			return require(plugin);
+		})
 	}
 	catch(ex)
 	{
@@ -38,6 +42,7 @@ function TestServer(cfgFilename)
 		{
 			"port":8000,
 			"webRoot":{"alias":"", "dir":process.cwd()},
+			"plugins":[],
 			"maps":[]
 		}
 		
@@ -243,6 +248,11 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	//set the headers for the content type.
 	let headers = {"content-type":TestServer.getContentType(filePath)};
 
+	//let the plugins process the requested file path.
+	this._config.server.plugins.map((plugin)=>{
+		filePath = plugin.resolveUrl ? plugin.resolveUrl(filePath, headers) : filePath;
+	});
+
 	//see if there's a gzip file to return instead of raw file.
 	let gzFilePath = `${filePath}.gz`;
 	if(TestServer.fileExists(gzFilePath))
@@ -262,6 +272,13 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		}
 		else
 		{
+			//let the plugins process the file contents (data).
+			this._config.server.plugins.map((plugin)=>{
+				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath) : {data, headers};
+				data = retInfo.data;
+				headers = retInfo.headers;
+			});
+
 			srvResponse.writeHead(200, "OK", headers);
 			srvResponse.end(data);
 			this.log(util.format("Server: Returning File: %s", filePath));
