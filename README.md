@@ -37,8 +37,8 @@ JSON file to configure the server.
 	* silent - don't log information to the console.
 	* plugins - an array of paths to the plugin files you want loaded.
 		* plugin - an exported object with functions:
-			* resolveUrl(url, headers) - can inspect the requested url, and return a different one (redirect).
-			* preprocessData(data, headers, url) - can return an object with {data, headers}, which will be returned in the response.
+			* resolveUrl(filePath, srvPath, headers) - can inspect the requested path, and return a different path (redirect).
+			* preprocessData(data, headers, filePath, srvPath) - can return an object with {data, headers}, which will be returned in the response.
 * webApp - information about how to configure the server for the app.
 * port - the port for the server to listen on for the app (default 8000).
 * webRoot - object with the web app's root directory (above which you can't navigate).
@@ -54,6 +54,8 @@ JSON file to configure the server.
 * log - pipe the current log file to the screen.
 
 ## Changelog
+
+* 1.0.22 - More work on plugins.
 
 * 1.0.22 - Added plugins.
 
