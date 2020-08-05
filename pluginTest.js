@@ -1,10 +1,10 @@
 module.exports = {
 	resolveUrl:(url, headers)=>{
-		console.log(`resolve url: ${url} (${headers})`);
+		console.log(`Plugin - resolve url: ${url} (${JSON.stringify(headers)})`);
 		return url;
 	},
 	preprocessData:(data, headers, url)=>{
-		console.log(`preprocessData url: ${url} (${headers})`);
+		console.log(`Plugin - preprocessData url: ${url}  (${JSON.stringify(headers)})`);
 		return {data, headers};
 	}
 };
