@@ -250,7 +250,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 
 	//let the plugins process the requested file path.
 	this._config.server.plugins.map((plugin)=>{
-		filePath = plugin.resolveUrl ? plugin.resolveUrl(filePath, headers) : filePath;
+		filePath = plugin.resolveUrl ? plugin.resolveUrl(filePath, srvPath, headers) : filePath;
 	});
 
 	//see if there's a gzip file to return instead of raw file.
@@ -274,7 +274,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		{
 			//let the plugins process the file contents (data).
 			this._config.server.plugins.map((plugin)=>{
-				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath) : {data, headers};
+				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath, srvPath) : {data, headers};
 				data = retInfo.data;
 				headers = retInfo.headers;
 			});

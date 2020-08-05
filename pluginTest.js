@@ -1,10 +1,12 @@
+const paths = require("path");
+
 module.exports = {
-	resolveUrl:(url, headers)=>{
-		console.log(`Plugin - resolve url: ${url} (${JSON.stringify(headers)})`);
-		return url;
+	resolveUrl:(filePath, srvPath, headers)=>{
+		console.log(`Plugin - resolve srvPath: ${srvPath} (${JSON.stringify(headers)})`);
+		return filePath;
 	},
-	preprocessData:(data, headers, url)=>{
-		console.log(`Plugin - preprocessData url: ${url}  (${JSON.stringify(headers)})`);
+	preprocessData:(data, headers, filePath, srvPath)=>{
+		console.log(`Plugin - preprocessData filePath: ${filePath},  srvPath: ${srvPath}(${JSON.stringify(headers)})`);
 		return {data, headers};
 	}
 };

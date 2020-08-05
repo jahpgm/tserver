@@ -7,12 +7,22 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "ibx-config",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
 			"program": "${workspaceFolder}\\test.server.js",
 			"args": ["ibx.config.json"],
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "test-config",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}\\test.server.js",
+			"args": ["test.config.json"],
 		}
 	]
 }

@@ -1,0 +1,17 @@
+{
+	"server":
+	{
+		"plugins":[
+			"./pluginTest.js"
+		]
+	},
+	"webApp":
+	{
+		"port":8000,
+		"webRoot":{"alias":"", "dir":"."},
+		"maps":
+		[
+		]
+	}
+	
+}
