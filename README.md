@@ -18,7 +18,10 @@ JSON file to configure the server.
 		"silent":false,
 		"plugins":[
 			'path/to/plugin/plugin.js'
-		]
+		],
+		"pathTokens":{
+			"TOKEN":"C:/path/for/token"
+		}
 	},
 	"webApp":
 	{
@@ -27,6 +30,7 @@ JSON file to configure the server.
 		"maps":
 		[
 			{"alias":"map_dir", "dir":"C:/some_dir/some_dir/dir_to_map"}
+			{"alias":"token_dir", "dir":"{TOKEN}/some_dir/dir_to_map"}
 		]
 	}
 	
@@ -39,6 +43,7 @@ JSON file to configure the server.
 		* plugin - an exported object with functions:
 			* resolveUrl(filePath, srvPath, headers) - can inspect the requested path, and return a different path (redirect).
 			* preprocessData(data, headers, filePath, srvPath) - can return an object with {data, headers}, which will be returned in the response.
+		* pathTokens - an object with keys you can use in a mapped path (surrounded by {}), that will be replaced when requested.
 * webApp - information about how to configure the server for the app.
 * port - the port for the server to listen on for the app (default 8000).
 * webRoot - object with the web app's root directory (above which you can't navigate).
