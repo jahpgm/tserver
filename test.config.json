@@ -4,8 +4,8 @@
 		"plugins":[
 			"./pluginTest.js"
 		],
-		"mapTokens":{
-			WEB_FOCUS:''
+		"pathTokens":{
+			"TOKEN":"replacement/string"
 		}
 	},
 	"webApp":
