@@ -36,7 +36,9 @@ function TestServer(cfgFilename)
 		"server":
 		{
 			"log":false,
-			"silent":false
+			"silent":false,
+			"plugins":{},
+			"pathTokens":{}
 		},
 		"webApp":
 		{
@@ -73,7 +75,8 @@ TestServer.CONTENT_TYPES =
 	".svg":"image/svg+xml",
 	".woff":"font/woff",
 	".woff2":"font/woff2",
-	".ttf":"font/truetype"
+	".ttf":"font/truetype",
+	".json":'application/json'
 };
 TestServer.getContentType = function(filePath){return (TestServer.CONTENT_TYPES[filePath.substring(filePath.lastIndexOf(".")).trim()] || TestServer.CONTENT_TYPES[".txt"]);};
 TestServer.fileExists = function(filepath)
@@ -226,15 +229,27 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 
 _p.loadPage = function(srvPath, srvRequest, srvResponse)
 {
-	srvPath = srvPath.replace(/\\/g, "/");
+	let origSrvPath = srvPath = srvPath.replace(/\\/g, "/");
+	
+	//set the headers for the content type.
+	let headers = {"content-type":TestServer.getContentType(srvPath)};
 	var mapped = false;
 	var filePath = "";
+
+	//let the plugins process the requested file path.
+	this._config.server.plugins.map((plugin)=>{
+		srvPath = plugin.resolveUrl ? plugin.resolveUrl(srvPath, headers) : srvPath;
+	});
+
 	this._config.webApp.maps.map((mapEntry)=>
 	{
 		var regEx = new RegExp( this._config.webApp.webRoot.alias ? `^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/` : `/${mapEntry.alias}/`);
 		if(regEx.test(srvPath))
 		{
 			filePath = srvPath.replace(regEx, `${mapEntry.dir}/`);
+			for(var token in this._config.server.pathTokens){
+				filePath = filePath.replace(`{${token}}`, `${this._config.server.pathTokens[token]}`)
+			}
 			mapped = true;
 		}
 	})
@@ -244,14 +259,6 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 
 
 	this.log("Server: Requesting File: " + srvPath);
-
-	//set the headers for the content type.
-	let headers = {"content-type":TestServer.getContentType(filePath)};
-
-	//let the plugins process the requested file path.
-	this._config.server.plugins.map((plugin)=>{
-		filePath = plugin.resolveUrl ? plugin.resolveUrl(filePath, srvPath, headers) : filePath;
-	});
 
 	//see if there's a gzip file to return instead of raw file.
 	let gzFilePath = `${filePath}.gz`;
@@ -274,7 +281,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		{
 			//let the plugins process the file contents (data).
 			this._config.server.plugins.map((plugin)=>{
-				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath, srvPath) : {data, headers};
+				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath, srvPath, origSrvPath) : {data, headers};
 				data = retInfo.data;
 				headers = retInfo.headers;
 			});

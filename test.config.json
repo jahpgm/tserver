@@ -3,7 +3,10 @@
 	{
 		"plugins":[
 			"./pluginTest.js"
-		]
+		],
+		"mapTokens":{
+			WEB_FOCUS:''
+		}
 	},
 	"webApp":
 	{
