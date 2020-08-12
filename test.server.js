@@ -23,6 +23,9 @@ function TestServer(cfgFilename)
 		this._config.filename = cfgFilename;
 		this._config.server.plugins = this._config.server.plugins || [];
 		this._config.server.plugins = this._config.server.plugins.map((plugin)=>{
+			for(var token in this._config.server.pathTokens){
+				plugin = plugin.replace(`{${token}}`, `${this._config.server.pathTokens[token]}`)
+			}
 			return require(plugin);
 		})
 	}
@@ -241,6 +244,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		srvPath = plugin.resolveUrl ? plugin.resolveUrl(srvPath, headers) : srvPath;
 	});
 
+	//resolve the maps, and also the pathTokens.
 	this._config.webApp.maps.map((mapEntry)=>
 	{
 		var regEx = new RegExp( this._config.webApp.webRoot.alias ? `^/${this._config.webApp.webRoot.alias}/${mapEntry.alias}/` : `/${mapEntry.alias}/`);
@@ -281,7 +285,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 		{
 			//let the plugins process the file contents (data).
 			this._config.server.plugins.map((plugin)=>{
-				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, filePath, srvPath, origSrvPath) : {data, headers};
+				const retInfo = plugin.preprocessData ? plugin.preprocessData(data, headers, {webRoot:this._config.webApp.webRoot, filePath, srvPath, origSrvPath}) : {data, headers};
 				data = retInfo.data;
 				headers = retInfo.headers;
 			});

@@ -5,8 +5,8 @@ module.exports = {
 		console.log(`Plugin - resolve srvPath: ${srvPath} (${JSON.stringify(headers)})`);
 		return srvPath;
 	},
-	preprocessData:(data, headers, filePath, srvPath, origSrvPath)=>{
-		console.log(`Plugin - preprocessData filePath: ${filePath},  srvPath: ${srvPath}(${JSON.stringify(headers)})`);
+	preprocessData:(data, headers, paths)=>{
+		console.log(`Plugin - preprocessData Paths: ${JSON.stringify(paths)} (${JSON.stringify(headers)})`);
 		return {data, headers};
 	}
 };

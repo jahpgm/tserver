@@ -2,10 +2,11 @@
 	"server":
 	{
 		"plugins":[
-			"./pluginTest.js"
+			"{PLUGIN_PATH}/pluginTest.js"
 		],
 		"pathTokens":{
-			"WEB_FOCUS":"C:/dev/wf"
+			"WEB_FOCUS":"C:/dev/wf",
+			"PLUGIN_PATH":"C:/dev/tserver"
 		}
 	},
 	"webApp":
