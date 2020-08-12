@@ -60,7 +60,9 @@ JSON file to configure the server.
 
 ## Changelog
 
-* 1.0.24 - Changed plugin 'preprocessData' to take an object with various paths.  Also, plugin path's can also use the pathTokens.
+* 1.0.25 - Changed plugin 'preprocessData' to take an object with various paths.  Also, plugin path's can also use the pathTokens.
+
+* 1.0.24 - More work on plugins.
 
 * 1.0.23 - More work on plugins.
 
