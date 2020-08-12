@@ -43,7 +43,7 @@ JSON file to configure the server.
 		* plugin - an exported object with functions:
 			* resolveUrl(filePath, srvPath, headers) - can inspect the requested path, and return a different path (redirect).
 			* preprocessData(data, headers, filePath, srvPath) - can return an object with {data, headers}, which will be returned in the response.
-		* pathTokens - an object with keys you can use in a mapped path (surrounded by {}), that will be replaced when requested.
+		* pathTokens - an object with keys you can use in a mapped path, or a plugin path (surrounded by {}), that will be replaced when processed.
 * webApp - information about how to configure the server for the app.
 * port - the port for the server to listen on for the app (default 8000).
 * webRoot - object with the web app's root directory (above which you can't navigate).
@@ -60,7 +60,9 @@ JSON file to configure the server.
 
 ## Changelog
 
-* 1.0.22 - More work on plugins.
+* 1.0.24 - Changed plugin 'preprocessData' to take an object with various paths.  Also, plugin path's can also use the pathTokens.
+
+* 1.0.23 - More work on plugins.
 
 * 1.0.22 - Added plugins.
 
