@@ -9,9 +9,9 @@ Simple Node.js http server...just used for lightweight development purposes.
 ***Note: If you run tserver without a config file, the server will use the current working directory (cwd) as the app root, and listen on port 8000.***
 
 ## Config
-You can use a '.env' file to set the default values for the config variables:
+You can use a '.env' file (optional) to set the default environment values (process.env) for all the server's configuration properties:
 ```javascript
-TSERVER_PORT=9000
+TSERVER_PORT=8000
 TSERVER_LOG=false
 TSERVER_SILENT=false
 TSERVER_PLUGINS=["./somePlugin.js"]
@@ -22,7 +22,7 @@ TSERVER_WEBROOT_DIR=C:/dev/tserver
 TSERVER_WEBAPP_MAPS=[{"alias":"some_alias", "dir":"actual/dir"}]
 ```
 
-You can also specify a config file to configure the server and web app:
+You can also specify a config file to override any settings in the environment:
 ```javascript
 {
 	"server":
@@ -72,6 +72,8 @@ You can also specify a config file to configure the server and web app:
 * log - pipe the current log file to the screen.
 
 ## Changelog
+
+* 1.0.28 - Updated packaging.
 
 * 1.0.27 - Updated packaging.
 
