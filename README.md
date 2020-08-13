@@ -9,7 +9,20 @@ Simple Node.js http server...just used for lightweight development purposes.
 ***Note: If you run tserver without a config file, the server will use the current working directory (cwd) as the app root, and listen on port 8000.***
 
 ## Config
-JSON file to configure the server.
+You can use a '.env' file to set the default values for the config variables:
+```javascript
+TSERVER_PORT=9000
+TSERVER_LOG=false
+TSERVER_SILENT=false
+TSERVER_PLUGINS=["./somePlugin.js"]
+TSERVER_PATH_TOKENS={TOKEN:"some/dir/to/replace"}
+TSERVER_PLUGINS=["./pluginTest.js"]
+TSERVER_WEBROOT_ALIAS=some_alias
+TSERVER_WEBROOT_DIR=C:/dev/tserver
+TSERVER_WEBAPP_MAPS=[{"alias":"some_alias", "dir":"actual/dir"}]
+```
+
+You can also specify a config file to configure the server and web app:
 ```javascript
 {
 	"server":
@@ -59,6 +72,8 @@ JSON file to configure the server.
 * log - pipe the current log file to the screen.
 
 ## Changelog
+
+* 1.0.26 - Added support for .env file so default config variables can be set outside of the config file.
 
 * 1.0.25 - Changed plugin 'preprocessData' to take an object with various paths.  Also, plugin path's can also use the pathTokens.
 

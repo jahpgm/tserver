@@ -55,6 +55,7 @@ function TestServer(cfgFilename)
 		return require(plugin);
 	})
 
+	//Do the rest of the startup...
 	process.stdin.on("data", this._handleInput.bind(this));
 	this.on("request", this._onRequest.bind(this));
 	this._openLog(args.log_file, true);

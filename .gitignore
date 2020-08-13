@@ -14,9 +14,6 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-#dotenv file
-.env
-
 # Windows shortcuts
 *.lnk
 
