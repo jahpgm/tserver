@@ -27,6 +27,7 @@ You can also specify a config file to configure the server and web app:
 {
 	"server":
 	{
+		"port":8000,
 		"log":false,
 		"silent":false,
 		"plugins":[
@@ -38,7 +39,6 @@ You can also specify a config file to configure the server and web app:
 	},
 	"webApp":
 	{
-		"port":8000,
 		"webRoot":{"alias":"some_root_name", "dir":"some/dir"},
 		"maps":
 		[
@@ -72,6 +72,8 @@ You can also specify a config file to configure the server and web app:
 * log - pipe the current log file to the screen.
 
 ## Changelog
+
+* 1.0.27 - Updated packaging.
 
 * 1.0.26 - Added support for .env file so default config variables can be set outside of the config file.
 
