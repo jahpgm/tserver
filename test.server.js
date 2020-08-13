@@ -9,6 +9,7 @@ const paths = require("path");
 const urls = require("url");
 const util = require("util");
 const readline = require("readline");
+const nodeEnv = require('dotenv').config();
 const args = require("./args.js");
  
 function TestServer(cfgFilename)
@@ -45,8 +46,8 @@ function TestServer(cfgFilename)
 		},
 		"webApp":
 		{
-			"port":8000,
-			"webRoot":{"alias":"", "dir":process.cwd()},
+			"port":process.env.TSERVER_PORT || 8000,
+			"webRoot":{"alias":process.TSERVER_WEBROOT_ALIAS || "", "dir":process.env.TSERVER_WEBROOT_DIR || process.cwd()},
 			"plugins":[],
 			"maps":[]
 		}

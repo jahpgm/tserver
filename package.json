@@ -19,7 +19,7 @@
 		"Lightweight"
 	],
 	"main": "test.server.js",
-	"bin":{
+	"bin": {
 		"tserver": "test.server.js"
 	},
 	"files": [
@@ -28,6 +28,9 @@
 		"args.js"
 	],
 	"scripts": {
-		"start":"node test.server.js"
+		"start": "node test.server.js"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0"
 	}
 }
