@@ -33,6 +33,7 @@
 			],
 			"program": "${workspaceFolder}\\test.server.js",
 			"args": [],
+			"console":"internalConsole"
 		}
 	]
 }
