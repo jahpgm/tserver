@@ -22,43 +22,43 @@ function TestServer(cfgFilename)
 		var cfgFile = fs.readFileSync(paths.resolve(process.cwd(), cfgFilename));
 		this._config = JSON.parse(cfgFile);
 		this._config.filename = cfgFilename;
-		this._config.server.plugins = this._config.server.plugins || [];
-		this._config.server.plugins = this._config.server.plugins.map((plugin)=>{
-			for(var token in this._config.server.pathTokens){
-				plugin = plugin.replace(`{${token}}`, `${this._config.server.pathTokens[token]}`)
-			}
-			return require(plugin);
-		})
 	}
 	catch(ex)
 	{
 		console.log(cfgFilename ? `Server: error parsing config file: ${cfgFilename} (${ex.message})` : `Server: No config specified.`)
 	}
 
+	//Make sure config file has all defaults.
 	this._config = TestServer.extend(
 	{
 		"server":
 		{
-			"log":false,
-			"silent":false,
-			"plugins":{},
-			"pathTokens":{}
+			"port":eval(process.env.TSERVER_PORT) || 8000,
+			"log": eval(process.env.TSERVER_LOG) || false,
+			"silent":eval(process.env.TSERVER_SILENT) || false,
+			"plugins":eval(process.env.TSERVER_PLUGINS) || [],
+			"pathTokens":eval(process.env.TSERVER_PATH_TOKENS) || {}
 		},
 		"webApp":
 		{
-			"port":process.env.TSERVER_PORT || 8000,
-			"webRoot":{"alias":process.TSERVER_WEBROOT_ALIAS || "", "dir":process.env.TSERVER_WEBROOT_DIR || process.cwd()},
-			"plugins":[],
-			"maps":[]
+			"webRoot":{"alias":process.env.TSERVER_WEBROOT_ALIAS || "", "dir":process.env.TSERVER_WEBROOT_DIR || process.cwd()},
+			"maps":eval(process.env.TSERVER_WEBAPP_MAPS) || []
 		}
 		
 	}, this._config);
 
+	//load the plugins.
+	this._config.server.plugins = this._config.server.plugins.map((plugin)=>{
+		for(var token in this._config.server.pathTokens){
+			plugin = plugin.replace(`{${token}}`, `${this._config.server.pathTokens[token]}`)
+		}
+		return require(plugin);
+	})
 
 	process.stdin.on("data", this._handleInput.bind(this));
 	this.on("request", this._onRequest.bind(this));
 	this._openLog(args.log_file, true);
-	this.listen(this._config.webApp.port, this._onListening.bind(this));
+	this.listen(this._config.server.port, this._onListening.bind(this));
 	this.on("close", this._onServerClosed.bind(this));
 }
 util.inherits(TestServer, http.Server);

@@ -1,6 +1,7 @@
 {
 	"server":
 	{
+		"port":8000,
 		"plugins":[
 			"{PLUGIN_PATH}/pluginTest.js"
 		],
@@ -11,7 +12,6 @@
 	},
 	"webApp":
 	{
-		"port":8000,
 		"webRoot":{"alias":"", "dir":"C:/dev"},
 		"maps":
 		[

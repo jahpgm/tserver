@@ -23,6 +23,16 @@
 			],
 			"program": "${workspaceFolder}\\test.server.js",
 			"args": ["test.config.json"],
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "no-config",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}\\test.server.js",
+			"args": [],
 		}
 	]
 }
