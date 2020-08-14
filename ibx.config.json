@@ -12,7 +12,7 @@
 	},
 	"webApp":
 	{
-		"webRoot":{"alias":"", "dir":"C:/dev"},
+		"webRoot":{"alias":"", "dir":"C:/dev/wf"},
 		"maps":
 		[
 			{"alias":"3rdparty_resources", "dir":"{WEB_FOCUS}/3rdparty_resources/src/main/resources/META-INF/resources/3rdparty_resources"},
