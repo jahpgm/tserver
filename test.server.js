@@ -201,10 +201,11 @@ _p._onRequest = function(request, response)
 	var query = urlInfo.query;
 
 	if(urlInfo.pathname.search("/tserver/ping") == 0){
+		this.log(`Server: pinged From: ${request.socket.localAddress} on Port: ${request.socket.localPort} (${new Date()})`)
 		response.writeHead(200, "OK", {"content-type":TestServer.getContentType('.json'), "access-control-allow-origin":"*"});
 		response.end(JSON.stringify({status:'running', ip:getLocalIPAddress(), port:this._config.server.port}));
 	}
-	if((urlInfo.pathname.search("/proxy/load") == 0) && query.uri)
+	else if((urlInfo.pathname.search("/proxy/load") == 0) && query.uri)
 		this.loadProxy(query.uri, request, response);
 	else
 		this.loadPage(urlInfo.pathname, request, response);
