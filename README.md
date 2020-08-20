@@ -73,6 +73,8 @@ You can also specify a config file to override any settings in the environment:
 
 ## Changelog
 
+* 1.0.30 - Fixed ping issue.
+
 * 1.0.29 - Added url '/tserver/ping' to test if server is running.
 
 * 1.0.28 - Updated packaging.
