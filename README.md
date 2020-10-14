@@ -3,7 +3,7 @@
 Simple Node.js http server...just used for lightweight development purposes.
 
 ## Install/Run
-* Global - npm install -g pgmjah-tserverw ill install as a global node program.  To run: tserver config.json
+* Global - npm install -g pgmjah-tserver will install as a global node program.  To run: tserver config.json (will default to current working dir as webRoot).
 * Local - npm install pgmjah-tserver. To run node test.server.js config.json
 
 ***Note: If you run tserver without a config file, the server will use the current working directory (cwd) as the app root, and listen on port 8000.***
@@ -72,6 +72,8 @@ You can also specify a config file to override any settings in the environment:
 * log - pipe the current log file to the screen.
 
 ## Changelog
+
+* 1.0.31 - Updated readme.md.
 
 * 1.0.30 - Fixed ping issue.
 
