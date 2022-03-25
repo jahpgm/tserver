@@ -73,6 +73,8 @@ You can also specify a config file to override any settings in the environment:
 
 ## Changelog
 
+* 1.0.32 - Added Header Access-Control-Allow-Origin * to all responses.
+
 * 1.0.31 - Updated readme.md.
 
 * 1.0.30 - Fixed ping issue.

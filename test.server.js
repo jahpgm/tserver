@@ -202,7 +202,7 @@ _p._onRequest = function(request, response)
 
 	if(urlInfo.pathname.search("/tserver/ping") == 0){
 		this.log(`Server: pinged From: ${request.socket.localAddress} on Port: ${request.socket.localPort} (${new Date()})`)
-		response.writeHead(200, "OK", {"content-type":TestServer.getContentType('.json'), "access-control-allow-origin":"*"});
+		response.writeHead(200, "OK", {"content-type":TestServer.getContentType('.json'), "Access-Control-Allow-Origin":"*"});
 		response.end(JSON.stringify({status:'running', ip:getLocalIPAddress(), port:this._config.server.port}));
 	}
 	else if((urlInfo.pathname.search("/proxy/load") == 0) && query.uri)
@@ -217,7 +217,7 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 	var proxyInfo = urls.parse(proxyUrl);
 	var clientRequest = https.request(proxyInfo, function(response)
 	{
-		srvResponse.writeHead(200, "OK", {"content-type":"text/html", "access-control-allow-origin":"*"});
+		srvResponse.writeHead(200, "OK", {"content-type":"text/html", "Access-Control-Allow-Origin":"*"});
 		response.on("data", function(chunk)
 		{
 			srvResponse.write(chunk);
@@ -230,7 +230,7 @@ _p.loadProxy = function(proxyUrl, srvRequest, srvResponse)
 	});
 	clientRequest.on("error", function(error)
 	{
-		srvResponse.writeHead(500, "Internal Server Error", {"content-type":"text/html", "access-control-allow-origin":"*"});
+		srvResponse.writeHead(500, "Internal Server Error", {"content-type":"text/html", "Access-Control-Allow-Origin":"*"});
 		srvResponse.end(util.format("<!DOCTYPE html><html><body><h1>Status: 500</h1><h2>Internal Server Error: %s</h2></body</html>", error.toString()));
 		self.log(util.format("Server: Error '%s' from '%s'", error.code, proxyUrl));
 	});
@@ -242,7 +242,7 @@ _p.loadPage = function(srvPath, srvRequest, srvResponse)
 	let origSrvPath = srvPath = srvPath.replace(/\\/g, "/");
 	
 	//set the headers for the content type.
-	let headers = {"content-type":TestServer.getContentType(srvPath)};
+	let headers = {"content-type":TestServer.getContentType(srvPath), "Access-Control-Allow-Origin":"*"};
 	var mapped = false;
 	var filePath = "";
 
