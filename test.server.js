@@ -309,8 +309,9 @@ function getLocalIPAddress()
 	var ifaces = os.networkInterfaces();
 	var ipAddress = "";
 	Object.keys(ifaces).forEach((ifname) => {
-		if(ifname !== 'Ethernet 2')
-			return;
+		/*not sure why the following 2 lines are here...I'm sure I had a reason at some point.*/
+		// if(ifname !== 'Ethernet 2')
+		// 	return;
 		ifaces[ifname].forEach((iface) => {
 			if ('IPv4' === iface.family && iface.internal === false) {
 				ipAddress = iface.address;
